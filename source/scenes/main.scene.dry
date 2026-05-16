@@ -14,7 +14,7 @@ is-deck: true
 
 - #map
 
-@secret
+@letter
 title: Letters
 is-deck: true
 
