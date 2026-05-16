@@ -1,0 +1,6 @@
+title: Room 1
+tags: map
+is-card: true
+view-if: 1 = 1
+
+= Example of room.
