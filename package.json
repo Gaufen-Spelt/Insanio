@@ -1,6 +1,6 @@
 {
-  "name": " social_democracy_alternate_history",
-  "version": "0.11.1",
+  "name": " insanio",
+  "version": "0.1",
   "description": "Building the game:",
   "main": "out/html/index.html",
   "scripts": {
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://aucchen@github.com/aucchen/social_democracy_alternate_history.git"
+    "url": "git+https://github.com/Gaufen-Spelt/Insanio.git"
   },
   "keywords": [],
-  "author": "Autumn Chen",
+  "author": "Gaufen Spelt",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aucchen/social_democracy_alternate_history/issues"
+    "url": "https://github.com/Gaufen-Spelt/Insanio/issues"
   },
-  "homepage": "https://github.com/aucchen/social_democracy_alternate_history",
+  "homepage": "https://github.com/Gaufen-Spelt/Insanio",
   "dependencies": {
     "dendrynexus": "github:aucchen/dendrynexus",
     "parliament-svg": "^3.0.0"
