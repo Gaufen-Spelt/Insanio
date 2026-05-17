@@ -75,7 +75,7 @@ on-display: {!
 
 - @door_result: And...
 
-@door_result:
+@door_result
 go-to: open if door_open = 0
 
 = World.
