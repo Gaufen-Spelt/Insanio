@@ -17,23 +17,6 @@ go-to: start_menu_2
 
 @start
 on-arrival: {!
-   var digit1 = Math.floor(Math.random() * 10);
-    var digit2 = Math.floor(Math.random() * 10);
-    var digit3 = Math.floor(Math.random() * 10);
-    var digit4 = Math.floor(Math.random() * 10);
-
-    Q.code_digit1 = digit1;
-    Q.code_digit2 = digit2;
-    Q.code_digit3 = digit3;
-    Q.code_digit4 = digit4;
-    Q.secret_code = "" + digit1 + digit2 + digit3 + digit4;
-
-    console.log(Q.secret_code);
-
-Q.code_digit1 = code.digit1;
-Q.code_digit2 = code.digit2;
-Q.code_digit3 = code.digit3;
-Q.code_digit4 = code.digit4;
 
 Q.started = 1;
 // time elapsed (in months)
@@ -74,6 +57,19 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'kpd_policy', 'kpd_ultimatum', 'popular_front_dispute',
             'high_inflation', 'banking_crisis', 'march_on_berlin',
             'understanding_enemy', 'schleichers_schemes'];
+
+Q.digit1 = Math.floor(Math.random() * 10);
+Q.digit2 = Math.floor(Math.random() * 10);
+Q.digit3 = Math.floor(Math.random() * 10);
+Q.digit4 = Math.floor(Math.random() * 10);
+
+Q.code_digit1 = Q.digit1;
+Q.code_digit2 = Q.digit2;
+Q.code_digit3 = Q.digit3;
+Q.code_digit4 = Q.digit4;
+Q.secret_code = "" + Q.digit1 + Q.digit2 + Q.digit3 + Q.digit4;
+
+console.log(Q.secret_code);
 !}
 new-page: true
 
