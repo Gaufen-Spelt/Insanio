@@ -4,3 +4,5 @@ is-card: true
 view-if: 1 = 1
 
 = Example of room.
+
+As such, [+ digit1 +] is the answer.
