@@ -205,7 +205,15 @@
   };
 
   window.onDisplayContent = function() {
-      window.updateSidebar();
+    window.updateSidebar();
+
+    // Also clean main content
+    $('#content p').each(function() {
+        var text = $(this).text().trim();
+        if (text === '' || text === '\u00B7' || text === '.') {
+            $(this).remove();
+        }
+    });
   };
 
   /*
