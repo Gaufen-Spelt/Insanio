@@ -10,9 +10,13 @@ max-cards: 6
 
 @maps
 title: Select Maps
-is-deck: true
+is-card: true
+new-page: true
+
+= Selection
 
 - #map
+- @main: Go back
 
 @letter
 title: Letters
