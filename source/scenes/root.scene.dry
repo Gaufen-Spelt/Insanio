@@ -94,9 +94,11 @@ function addLine(text, delay, style) {
     }, delay);
 }
 
-addLine('....', 400, 'font-size:3em;letter-spacing:0.2em;margin-bottom:0.5em;');
-addLine('...,', 1800, 'font-size:1.4em;letter-spacing:0.1em;');
+addLine('...', 400, 'font-size:3em;letter-spacing:0.2em;margin-bottom:0.5em;');
+addLine('...', 1800, 'font-size:1.4em;letter-spacing:0.1em;');
 addLine('Status established: Heartbeat is stable.', 2800, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
+addLine('Survivor count: Two.', 2800, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
+addLine('Task: No specific variable given..', 2800, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
 
 setTimeout(function() {
     overlay.style.transition = 'opacity 2.5s ease';
