@@ -7,9 +7,6 @@ Q.deckDescription = '';
 Q.handDescription = '';
 !}
 
-- @maps
-- @letter
-
 {!<style>
   body {
     background: #111;
@@ -75,3 +72,6 @@ Q.handDescription = '';
   });
 })();
 </script>!}
+
+- @maps
+- @letter
