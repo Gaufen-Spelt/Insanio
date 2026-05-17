@@ -1,37 +1,54 @@
 title: The Door
 subtitle: It has some sort of encryption...
 tags: inter
+new-page: true
 
 = Door
 
 - @open: Enter the code
 
 @open
-on-arrival: {!
+new-page: true
+on-display: {!
+    var container = document.getElementById('door-input');
+    container.innerHTML = '';
+
     var digits = ['', '', '', ''];
-    var container = document.createElement('div');
-    container.style.cssText = 'margin:1em 0; display:flex; gap:0.5em; align-items:center;';
+    var wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:flex; gap:0.5em; align-items:center; margin:0.5em 0;';
 
     for (var i = 0; i < 4; i++) {
         (function(index) {
             var input = document.createElement('input');
             input.type = 'text';
             input.maxLength = 1;
-            input.style.cssText = 'width:2em; height:2em; text-align:center; font-size:1.2em; font-family:inherit; border:1px solid #876; background:var(--content-bg-color); color:var(--text-color);';
+            input.style.cssText =
+                'width:2em; height:2em; text-align:center; font-size:1.2em;' +
+                'font-family:monospace; border:1px solid #876;' +
+                'background:var(--content-bg-color); color:var(--text-color); outline:none;';
             input.addEventListener('input', function() {
                 digits[index] = this.value.replace(/[^0-9]/g, '');
                 this.value = digits[index];
                 if (digits[index] && index < 3) {
-                    container.querySelectorAll('input')[index + 1].focus();
+                    wrapper.querySelectorAll('input')[index + 1].focus();
                 }
             });
-            container.appendChild(input);
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') btn.click();
+            });
+            wrapper.appendChild(input);
         })(i);
     }
 
     var btn = document.createElement('button');
     btn.textContent = 'Confirm';
-    btn.style.cssText = 'font-family:inherit; background:none; border:1px solid #876; color:var(--text-color); padding:0.3em 0.8em; cursor:pointer;';
+    btn.style.cssText =
+        'font-family:inherit; background:none; border:1px solid #876;' +
+        'color:var(--text-color); padding:0.3em 0.8em; cursor:pointer; margin-left:0.5em;';
+
+    var msg = document.createElement('p');
+    msg.style.cssText = 'color:#f55; font-size:12px; margin-top:6px; height:16px;';
+
     btn.addEventListener('click', function() {
         var entered = digits.join('');
         var secret = window.dendryUI.dendryEngine.state.qualities.secret_code;
@@ -39,21 +56,28 @@ on-arrival: {!
             window.dendryUI.dendryEngine.state.qualities.door_open = 1;
             window.dendryUI.dendryEngine.goToScene('door_result');
         } else {
-            window.dendryUI.dendryEngine.state.qualities.door_open = 0;
+            msg.textContent = '✗ Wrong code.';
+            digits = ['', '', '', ''];
+            wrapper.querySelectorAll('input').forEach(function(el) { el.value = ''; });
+            wrapper.querySelectorAll('input')[0].focus();
         }
     });
 
-    container.appendChild(btn);
-    document.getElementById('content').appendChild(container);
-    container.querySelectorAll('input')[0].focus();
+    wrapper.appendChild(btn);
+    container.appendChild(wrapper);
+    container.appendChild(msg);
+    wrapper.querySelectorAll('input')[0].focus();
 !}
 
-= Door Code.
+= Enter the code.
 
-Code.
+{!<div id="door-input"></div>!}
 
-[+ secret_code +]
+- @door_result: And...
 
-@door_result
+@door_result:
+go-to: open if door_open = 0
 
-= World is crumbling.
+= World.
+
+Open.
