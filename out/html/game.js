@@ -160,8 +160,6 @@
 
   window.displayPinnedCards = function(cards) {
     if (cards.length === 0) return null;
-
-    // No <hr> — skip the engine's default which adds one
     var $cardsEl = $('<ul>').addClass('pinned-cards');
     for (var card of cards) {
         var $cardEl = $('<li>').addClass('pinned-card');
@@ -177,6 +175,57 @@
         $cardsEl.append($cardEl);
     }
     $('#content').append($cardsEl);
+};
+
+window.displayHand = function(hand, maxCards) {
+    if (!hand || hand.length === 0) return null;
+    var $handEl = $('.hand');
+    if ($handEl.length === 0) {
+        $handEl = $('<ul>').addClass('hand');
+    } else {
+        $handEl.empty();
+    }
+    for (var i = 0; i < maxCards; i++) {
+        var $cardEl = $('<li>').addClass('card-in-hand');
+        if (hand[i]) {
+            var card = hand[i];
+            var $cardLink = $('<a>').addClass('card').attr({href: '#', 'card-id': card.id, title: card.title});
+            var $title = $('<span>').addClass('card-caption').text(card.title);
+            if (card.image) {
+                $cardLink.append($('<img>').addClass('card-img').attr({src: card.image}));
+            }
+            if (card.subtitle) {
+                $cardLink.append($('<span>').addClass('card-tooltip').text(card.subtitle));
+            }
+            $cardEl.append($cardLink).append($title);
+        } else {
+            $cardEl.append($('<div>').addClass('blank-card'));
+        }
+        $handEl.append($cardEl);
+    }
+    $('#content').append($handEl);
+};
+
+window.displayDecks = function(decks) {
+    if (!decks || decks.length === 0) return null;
+    var $decksEl = $('<ul>').addClass('decks');
+    for (var deck of decks) {
+        var $deckEl = $('<li>').addClass('deck');
+        var $deckLink = $('<a>').addClass('card').attr({href: '#', 'card-id': deck.id, title: deck.title});
+        var $title = $('<span>').addClass('card-caption').text(deck.title);
+        if (deck.image) {
+            $deckLink.append($('<img>').addClass('card-img').attr({src: deck.image}));
+        }
+        if (deck.subtitle) {
+            $deckLink.append($('<span>').addClass('card-tooltip').text(deck.subtitle));
+        }
+        if (!deck.canChoose) {
+            $deckEl.addClass('unavailable-card');
+        }
+        $deckEl.append($deckLink).append($title);
+        $decksEl.append($deckEl);
+    }
+    $('#content').append($decksEl);
 };
 
   
