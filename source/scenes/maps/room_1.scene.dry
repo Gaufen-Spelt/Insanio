@@ -5,4 +5,4 @@ view-if: 1 = 1
 
 = Example of room.
 
-As such, [+ digit1 +] is the answer.
+As such, [+ code_digit1 +] is the answer.
