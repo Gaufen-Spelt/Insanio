@@ -1,3 +1,7 @@
+/* =============================================
+   CSS VARIABLES
+   Light mode defaults; dark mode overrides below.
+   ============================================= */
 body {
   --bg-color: #f3f3e3;
   --border-color: #000;
@@ -10,14 +14,18 @@ body {
   --tab-bg-color: #dedede;
   --tab-color: #ddd;
   --tab-hover-color: #ececec;
-  --card-border-color: #ccc; 
-  --card-bg-color: #ddd; 
-  font-family: "Minion Pro", Georgia, serif;
-  background-color: var(--bg-color);
-  padding: 0;
-  line-height: 155%;
-  overflow-y: scroll;
+  --card-border-color: #ccc;
+  --card-bg-color: #ddd;
+  /* Notebook */
+  --notebook-bg: #fefdf5;
+  --notebook-line: #d4cfa8;
+  --notebook-border: #b8ae82;
+  /* Layout */
+  --panel-width: 220px;
+  --notebook-tab-width: 28px;
+  --notebook-open-width: 320px;
 }
+
 body.dark-mode {
   --bg-color: #000;
   --border-color: #fff;
@@ -25,71 +33,234 @@ body.dark-mode {
   --text-color: #efefef;
   --link-color: #ff8080;
   --link-hover-color: rgba(255, 255, 255, 0.06);
-  --tab-bg-color: #555555;
+  --tab-bg-color: #555;
   --tab-color: #505050;
   --tab-hover-color: #242424;
   --card-border-color: #4c4c4c;
   --card-bg-color: #3f3f3f;
+  --notebook-bg: #1a1a12;
+  --notebook-line: #2e2b1a;
+  --notebook-border: #4a4530;
 }
-body.dark-mode #content {
-  border-style: double;
-  border-width: 4px;
-  border-color: #888;
+
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
-body.dark-mode .tools {
-  border-style: double;
-  border-width: 4px;
-  border-color: #888;
-}
-header, #content, footer {
+
+body {
+  font-family: "Minion Pro", Georgia, serif;
+  background-color: var(--bg-color);
   color: var(--text-color);
-  max-width: 540px;
-  margin: 0 auto;
-  overflow: auto;
+  margin: 0;
+  padding: 0;
+  line-height: 155%;
+  overflow-y: scroll;
+  min-height: 100vh;
 }
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+p {
+  margin: 0 0 1em;
+  text-indent: 1em;
+}
+
+blockquote { margin: 1em 2em; }
+blockquote.attribution { margin-left: 4em; }
+blockquote + blockquote.attribution { margin-top: -1em; }
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+table {
+  border-spacing: 0.5em;
+}
+
+
+/* =============================================
+   BACKGROUND LAYERS
+   ============================================= */
+.background {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-color);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  pointer-events: none;
+}
+#bg2 { z-index: -100; }
+#bg1  { z-index: -99; }
+
+
+/* =============================================
+   SPRITE CONTAINER
+   ============================================= */
+#contentSpriteContainer {
+  position: fixed;
+  inset: 0;
+  max-width: 62em;
+  margin: 0 auto;
+  z-index: -97;
+  pointer-events: none;
+}
+.sprite { position: absolute; width: 180px; }
+#topLeftSprite     { top: -1em;  left: 0.4em; }
+#topRightSprite    { top: -1em;  right: 0.4em; }
+#bottomLeftSprite  { left: 0.4em; top: 50%; }
+#bottomRightSprite { right: 0.4em; top: 50%; }
+
+
+/* =============================================
+   PAGE SHELL — CSS GRID
+   Three named areas: sidebar | content | notebook
+   ============================================= */
+#page {
+  display: grid;
+  grid-template-columns: var(--panel-width) 1fr var(--notebook-tab-width);
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header  header   header"
+    "sidebar content  notebook"
+    "footer  footer   footer";
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  transition: grid-template-columns 0.3s ease;
+}
+
+/* Widen notebook column when open */
+#page.notebook-open {
+  grid-template-columns: var(--panel-width) 1fr var(--notebook-open-width);
+}
+
+
+/* =============================================
+   HEADER
+   ============================================= */
+header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 1em;
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+header h1, header h2 {
+  display: inline;
+  font-weight: normal;
+  font-size: 1em;
+  margin: 0;
+}
+header h1 { font-weight: bold; }
+header h2::before {
+  content: "by ";
+  font-style: italic;
+}
+
+#header-links {
+  display: flex;
+  gap: 1.2em;
+  background-color: var(--bg-color);
+  padding: 0.4em 1em;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =============================================
+   SIDEBAR
+   ============================================= */
+#stats_sidebar {
+  grid-area: sidebar;
+  background-color: var(--content-bg-color);
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  align-self: start;
+  margin: 0.8em 0 0.8em 0.8em;
+  overflow: hidden;
+}
+
+body.dark-mode #stats_sidebar {
+  border: double 4px #888;
+}
+
+.tab_container {
+  display: flex;
+  background-color: var(--tab-bg-color);
+}
+
+.tab_button {
+  flex: 1;
+  font-family: "Minion Pro", Georgia, serif;
+  background-color: var(--tab-color);
+  color: var(--text-color);
+  border: none;
+  outline: none;
+  padding: 8px 4px;
+  cursor: pointer;
+  font-size: 0.82em;
+}
+.tab_button.active { background-color: var(--content-bg-color); }
+.tab_button:hover  { background-color: var(--tab-hover-color); }
+
+#qualities {
+  padding: 0.6em;
+  line-height: 1.3em;
+}
+#qualities p   { text-indent: 0; }
+#qualities h1  {
+  font-size: 1.05em;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow:
+    rgba(255, 255, 255, 0.75) 2px 2px 2px,
+    rgba(0, 0, 0, 0.1) -1px -1px 2px;
+  margin: 0.4em 0;
+}
+
+
+/* =============================================
+   MAIN CONTENT AREA
+   ============================================= */
 #content {
+  grid-area: content;
   position: relative;
   background-color: var(--content-bg-color);
   font-size: 1.1em;
-  padding: 1em 1.5em 1.5em 1.5em;
+  padding: 1em 1.5em 1.5em;
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+  margin: 0.8em;
+  align-self: start;
 }
-footer {
-  margin-top: 1em;
-  font-size: 0.8em;
-  position: relative;
+
+body.dark-mode #content {
+  border: double 4px #888;
 }
-footer a {
-  padding-right: 1em;
-}
-header {
-  text-align: right
-}
-#header-links {
-  text-align: left;
-  float: left;
-  display: inline-block;
-  margin-bottom: 0.5em;
-  padding-left: 1em;
-  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
-  background-color: var(--bg-color);
-}
-#header-links a {
-  padding-right: 1em;
-}
-header h1, header h2 {
-  display: inline-block;
+
+#content h1 {
+  margin: 0.5em 0 1em;
+  font-size: 1.35em;
   font-weight: normal;
-  margin: 0;
-  font-size: 1em;
-}
-header h1 {
-  font-weight: bold;
-}
-header h2:before {
-  content: "by";
-  font-style: italic;
-  padding: 0 0.3em 0 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow:
+    rgba(255, 255, 255, 0.75) 2px 2px 2px,
+    rgba(0, 0, 0, 0.1) -1px -1px 2px;
 }
 
 #content #read-marker {
@@ -99,39 +270,19 @@ header h2:before {
   width: 20%;
   clear: left;
 }
-#content h1:first-child {
-  margin-top: 0.5em;
-}
-#content h1 {
-  margin: 2em 0 1em 0;
-  font-size: 1.35em;
-  font-weight: normal;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-shadow: rgba(255, 255, 255, 0.75) 2px 2px 2px,
-               rgba(0, 0, 0, 0.1) -1px -1px 2px;
-}
-a {
-  color: var(--link-color);
-  text-decoration: none;
-}
-p {
-  margin: 0;
-  margin-bottom: 1em;
-  text-indent: 1em;
-}
+
 p.game-over {
   border: 2px solid #bbb;
   padding: 0.5em;
-  margin: 0.5em 0 0 0;
+  margin: 0.5em 0 0;
   border-radius: 4px;
   color: #999;
 }
+
 ul.choices {
   border: 2px solid #876;
   padding: 0;
-  margin: 0.25em 0 0 0;
+  margin: 0.25em 0 0;
   list-style-type: none;
   border-radius: 4px;
   clear: left;
@@ -153,175 +304,183 @@ ul.choices li:hover {
   background-color: var(--link-hover-color);
   cursor: pointer;
 }
-ul.choices li:last-child {
-  border-bottom: none;
+ul.choices li:last-child { border-bottom: none; }
+ul.choices a { text-decoration: none; }
+
+
+/* =============================================
+   NOTEBOOK PANEL
+   ============================================= */
+#notebook {
+  grid-area: notebook;
+  display: flex;
+  flex-direction: row;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: calc(100vh - 1.6em);
+  margin: 0.8em 0.8em 0.8em 0;
+  overflow: hidden;
 }
-ul.choices a {
-  text-decoration: none;
-}
-blockquote {
-  margin: 1em 2em;
-}
-blockquote.attribution {
-  margin-left: 4em;
-}
-blockquote + blockquote.attribution {
-  margin-top: -1em;
-}
-/* This is mostly copied from undum. */
-#mid_panel {
-  margin: 0 16rem;
-}
-#page {
-  margin: 0 auto;
-  position: relative;
-}
-#tools_wrapper {
-  position: absolute;
-  width: 100%;
-  max-width: 69em;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-}
-.tools {
-  padding: 0.6em;
-  width: 14rem;
-  color: var(--text-color);
-  background-color: var(--content-bg-color);
-  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
-}
-.tools.left {
-  float: left;
-  left: 0.4em;
-}
-.tools.right {
-  float: right;
-  right: 0.4em;
-}
-#qualities {
-  text-indent: 0;
-  line-height: 1.3em;
-}
-#qualities p {
-  text-indent: 0;
-}
-#qualities h1 {
-  font-size: 1.1em;
-  font-weight: normal;
-  text-align: center;
+
+/* Always-visible tab strip */
+#notebook-tab {
+  width: var(--notebook-tab-width);
+  background-color: var(--notebook-border);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 0.75em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-shadow: rgba(255, 255, 255, 0.75) 2px 2px 2px,
-               rgba(0, 0, 0, 0.1) -1px -1px 2px;
+  user-select: none;
+  flex-shrink: 0;
+  gap: 0.5em;
+  padding: 1em 0;
+  transition: background 0.2s;
+  border-radius: 3px 0 0 3px;
 }
-#qualities h1 + p:first-line {
-  font-weight: normal;
+#notebook-tab:hover { background-color: #a09860; }
+
+#notebook-tab .tab-icon {
+  writing-mode: horizontal-tb;
+  font-size: 1.3em;
+}
+
+/* Expandable writing area */
+#notebook-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--notebook-bg);
+  border: 1px solid var(--notebook-border);
+  border-left: none;
+  overflow: hidden;
+}
+
+/* Hidden when notebook is closed */
+#page:not(.notebook-open) #notebook-body {
+  display: none;
+}
+
+#notebook-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em 0.8em;
+  background-color: var(--notebook-border);
+  color: #fff;
+  font-size: 0.8em;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+#notebook-header span {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+#notebook-clear {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-size: 0.75em;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: inherit;
+}
+#notebook-clear:hover { background-color: rgba(255, 255, 255, 0.15); }
+
+/* Lined paper textarea */
+#notebook-textarea {
+  flex: 1;
+  width: 100%;
+  padding: 0.6em 1em 0.6em 2.5em;
+  font-family: "Minion Pro", Georgia, serif;
+  font-size: 0.9em;
+  color: var(--text-color);
+  background-color: var(--notebook-bg);
+  background-image:
+    linear-gradient(
+      to right,
+      transparent 2em,
+      rgba(200, 80, 80, 0.25) 2em,
+      rgba(200, 80, 80, 0.25) calc(2em + 1px),
+      transparent calc(2em + 1px)
+    ),
+    repeating-linear-gradient(
+      transparent,
+      transparent calc(1.55em - 1px),
+      var(--notebook-line) calc(1.55em - 1px),
+      var(--notebook-line) 1.55em
+    );
+  background-attachment: local;
+  line-height: 1.55em;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+}
+
+#notebook-footer {
+  padding: 0.3em 0.8em;
+  font-size: 0.72em;
+  color: var(--unavailable-color);
+  background-color: var(--notebook-bg);
+  border-top: 1px solid var(--notebook-line);
+  flex-shrink: 0;
 }
 
 
-/* tabs */
-.tab_container {
-    background-color: var(--tab-bg-color);
-    margin-top: -0.6em;
-    margin-left: -0.6em;
-    margin-right: -0.6em;
+/* =============================================
+   FOOTER
+   ============================================= */
+footer {
+  grid-area: footer;
+  font-size: 0.8em;
+  padding: 0.5em 1em 1em;
+  color: var(--text-color);
 }
-.tab_button {
-    font-family: "Minion Pro", Georgia, serif;
-    background-color: var(--tab-color);
-    color: var(--text-color);
-    /*float: left;*/
-    border: none;
-    outline: none;
-    padding: 10px;
-}
-.tab_button.active {
-    background-color: var(--content-bg-color);
-}
-.tab_button:hover {
-    background-color: var(--tab-hover-color);
-}
+footer a { padding-right: 1em; }
 
 
+/* =============================================
+   OVERLAYS (options, save/load)
+   ============================================= */
 .overlay {
-    background: rgba(0,0,0,0.7);
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 2;
-    overflow: scroll;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow-y: auto;
 }
-.options {
-    text-align: right;
-}
+
 .overlay_top {
-    position: relative;
-    max-width: 540px;
-    margin: 100px auto;
-    background: rgba(50,50,50,0.7);
-    border: 2px solid;
-    color: white;
-}
-.save_info {
-    min-width: 10em;
-}
-.background {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: var(--bg-color);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    overflow: hidden;
-}
-/*
- * This is used for overlaying transparencies
- * only transition on fade-in
- * */
-#bg2 {
-    z-index: -100;
-}
-#bg1 {
-    z-index: -99;
-}
-.b {
-}
-.save_button {
-}
-.delete_button {
+  position: relative;
+  max-width: 540px;
+  margin: 100px auto;
+  background: rgba(50, 50, 50, 0.85);
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 1em;
 }
 
-/*
- * Card stuff for dendrynexus
- * 
- */
+.save_info { min-width: 10em; }
 
+
+/* =============================================
+   CARD SYSTEM
+   ============================================= */
 ul.decks, ul.hand, ul.pinned-cards {
   list-style: none;
   padding-left: 0;
-}
-
-.hand {
-
-}
-
-.pinned-cards {
-
-}
-
-.deck {
-
 }
 
 a.card {
@@ -338,6 +497,7 @@ a.card:hover {
   left: -5px;
   top: -5px;
 }
+
 div.blank-card {
   display: inline-block;
   width: 120px;
@@ -355,7 +515,6 @@ div.blank-card {
   vertical-align: top;
 }
 
-/* TODO: unavailable card */
 .unavailable-card {
   color: var(--unavailable-color);
   background-color: var(--unavailable-bg-color) !important;
@@ -380,197 +539,107 @@ div.blank-card {
   background-color: var(--content-bg-color);
   left: 105%;
 }
-
 .card-img {
   height: 150px;
   width: 120px;
   object-fit: cover;
 }
-
-a.card:focus .card-tooltip, a.card:hover .card-tooltip {
+a.card:focus .card-tooltip,
+a.card:hover .card-tooltip {
   visibility: visible;
   position: absolute;
 }
 
-/* Unlike cards, face images can have different sizes. */
 .face-figure {
-  /*vertical-align: top;*/
   display: inline-block;
   border: 5px solid var(--card-border-color);
   float: left;
   max-width: 35%;
-  /*max-height: 180px;*/
   margin-right: 1em;
   margin-bottom: 0.5em;
   overflow: hidden;
 }
 .face-img {
-  /*max-width: 150px;*/
   vertical-align: bottom;
   object-fit: cover;
 }
 
-/*
- * sprite stuff- feel free to comment out/remove if not using
- */
-img {
-    max-width: 100%;
-    max-height: 100%;
-}
-#contentSpriteContainer {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  max-width: 62em;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  z-index: -97;
-}
-.sprite {
-    position: absolute;
-    width: 180px;
-}
-#topLeftSprite {
-    float: left;
-    top: -1em;
-    left: 0.4em;
-}
-#topRightSprite {
-    float: right;
-    top: -1em;
-    right: 0.4em;
-}
-#bottomLeftSprite {
-    float: left;
-    left: 0.4em;
-    top: 50%;
-}
-#bottomRightSprite {
-    float: right;
-    right: 0.4em;
-    top: 50%;
+
+/* =============================================
+   PARTY SEAT COLORS
+   ============================================= */
+.seat.kpd  { fill: #8B0000; }
+.seat.spd  { fill: #E3000F; stroke: var(--border-color); stroke-width: 1.5px; }
+.seat.ddp  { fill: #DCCA4A; }
+.seat.z    { fill: #000; }
+.seat.bvp  { fill: #69A2BE; }
+.seat.dvp  { fill: #D5AC27; }
+.seat.other{ fill: #909090; }
+.seat.dnvp { fill: #3F7BC1; }
+.seat.nsdap{ fill: #954B00; }
+.seat.sapd { fill: #C40000; }
+
+.tooltip-text {
+  text-decoration: underline;
+  text-decoration-style: dotted;
 }
 
-/* smaller screens: hide left margin */
-@media screen and (max-width: 1200px) {
-  .tools {
-      margin-right: 0.4em;
-      margin-left: 0.4em;
-  }
-  #mid_panel {
-      margin-right: 0.4em;
-  }
-}
-/* mobile: move the stat box to the top if the screen is too small,
- * and reduce font size slightly. */
-@media screen and (max-width: 560px) {
-  #page {
-      position: static;
-  }
-  #content {
-      position: static;
-      font-size: 1em;
-      line-height: 160%;
-      padding: 1em 1em 1.5em 1em;
-  }
-  #qualities {
-      font-size: 1em;
-  }
-  #tools_wrapper {
-    position: static;
-  }
-  .tools {
-      width: 90%;
-      margin: 2em 0 1em 0;
-      margin: 0.4em;
-  }
-  .tools.left {
-      float: none;
-      left: 0;
-  }
-  .tools.right {
-      float: none;
-      right: 0;
-  }
-  #mid_panel {
-      margin: 0 auto;
-  }
-
-  /* cards are smaller on mobile */
-  .card-img {
-    height: 125px;
-    width: 100px;
-  }
-  a.card {
-    width: 100px;
-    height: 125px;
-    border: 8px solid var(--card-border-color);
-    margin-bottom: 0.5em;
-    position: relative;
-  }
-  div.blank-card {
-    width: 100px;
-    height: 125px;
-    border: 8px solid var(--card-border-color);
-    margin-bottom: 0.5em;
-  }
-  .card-in-hand, .pinned-card, .deck {
-    max-width: 120px;
-    margin-right: 1em;
-    vertical-align: top;
-  }
-}
-
-
-/* New stuff just for this game */
-
-/* colored box div */
+/* Colored box indicator (party legend etc.) */
 .box {
   display: inline-block;
   height: 1em;
   width: 1em;
 }
 
-table {
-    border-spacing: 0.5em;
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+/* Narrow desktop — shrink sidebar slightly */
+@media (max-width: 1000px) {
+  :root { --panel-width: 180px; }
 }
 
-/* Styles for parties */
-.seat.kpd {
-    fill: #8B0000;
-}
-.seat.spd {
-    fill: #E3000F;
-    stroke: var(--border-color);
-    stroke-width: 1.5px;
-}
-.seat.ddp {
-    fill: #DCCA4A;
-}
-.seat.z {
-    fill: #000;
-}
-.seat.bvp {
-    fill: #69A2BE;
-}
-.seat.dvp {
-    fill: #D5AC27;
-}
-.seat.other {
-    fill: #909090;
-}
-.seat.dnvp {
-    fill: #3F7BC1;
-}
-.seat.nsdap {
-    fill: #954B00;
-}
-.seat.sapd {
-    fill: #C40000;
+/* Tablet — sidebar stacks above content */
+@media (max-width: 720px) {
+  #page {
+    grid-template-columns: 1fr var(--notebook-tab-width);
+    grid-template-areas:
+      "header  header"
+      "sidebar sidebar"
+      "content notebook"
+      "footer  footer";
+  }
+  #page.notebook-open {
+    grid-template-columns: 1fr var(--notebook-open-width);
+  }
+  #stats_sidebar {
+    margin: 0.8em 0.8em 0 0.8em;
+    position: static;
+  }
+  #notebook {
+    height: 80vh;
+    margin-top: 0;
+  }
 }
 
-.tooltip-text {
-    text-decoration: underline;
-    text-decoration-style: dotted;
+/* Mobile */
+@media (max-width: 480px) {
+  :root { --notebook-open-width: 85vw; }
+
+  #content {
+    font-size: 1em;
+    padding: 1em;
+  }
+  .tab_button {
+    padding: 8px 2px;
+    font-size: 0.76em;
+  }
+
+  /* Smaller cards on mobile */
+  .card-img      { height: 125px; width: 100px; }
+  a.card         { width: 100px; height: 125px; border-width: 8px; }
+  div.blank-card { width: 100px; height: 125px; border-width: 8px; }
+  .card-in-hand, .pinned-card, .deck { max-width: 120px; }
 }
