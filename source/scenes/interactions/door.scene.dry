@@ -54,7 +54,7 @@ on-display: {!
         var secret = window.dendryUI.dendryEngine.state.qualities.secret_code;
         if (entered === String(secret)) {
             window.dendryUI.dendryEngine.state.qualities.door_open = 1;
-            window.dendryUI.dendryEngine.goToScene('door_result');
+            window.dendryUI.dendryEngine.goToScene('door.door_result');
         } else {
             msg.textContent = '✗ Wrong code.';
             digits = ['', '', '', ''];
