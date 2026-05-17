@@ -1,0 +1,11 @@
+title: Letters
+new-page: true
+is-card: true
+is-pinned-card: true
+
+= Letters
+
+Open letters...
+
+- #letter
+- @root: Back
