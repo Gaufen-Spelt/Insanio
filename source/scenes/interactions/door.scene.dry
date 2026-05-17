@@ -6,6 +6,7 @@ new-page: true
 = Door
 
 - @open: Enter the code
+- @interactions: Back to interactions
 
 @open
 new-page: true
@@ -74,6 +75,7 @@ on-display: {!
 {!<div id="door-input"></div>!}
 
 - @door_result: And...
+- @door: Back
 
 @door_result
 go-to: open if door_open = 0
