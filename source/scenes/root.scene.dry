@@ -76,6 +76,7 @@ new-page: true
 
 @intro
 subtitle: And your soul...
+set-bg: images/insignia.png
 on-arrival: {!
 
 var overlay = document.createElement('div');
