@@ -248,6 +248,7 @@ window.displayDecks = function(decks) {
     if (window.justLoaded) {
         window.justLoaded = false;
     }
+    console.log(window.dendryUI.dendryEngine.state.sceneId);
   };
 
   // TODO: have some code for tabbed sidebar browsing.
