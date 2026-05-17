@@ -9,20 +9,12 @@ max-cards: 6
 - @letter
 
 @maps
-title: Select Maps
-is-deck: true
-new-page: true
-go-to: selector 
+is-pinned-card: true
+title: Maps
+subtitle: Selection.
 
-@selector
-
-= Selection
+= Maps
 
 - #map
-- @main: Go back
+- @main: Return back
 
-@letter
-title: Letters
-is-deck: true
-
-- #letter
