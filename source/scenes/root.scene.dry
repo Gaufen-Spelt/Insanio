@@ -28,6 +28,7 @@ function generateCode() {
 
 var code = generateCode();
 console.log(code); // e.g. "4827"
+Q.secret_code = code;
 
 Q.started = 1;
 // time elapsed (in months)
