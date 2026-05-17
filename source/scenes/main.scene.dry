@@ -7,14 +7,3 @@ max-cards: 6
 
 - @maps
 - @letter
-
-@maps
-is-pinned-card: true
-title: Maps
-subtitle: Selection.
-
-= Maps
-
-- #map
-- @main: Return back
-
