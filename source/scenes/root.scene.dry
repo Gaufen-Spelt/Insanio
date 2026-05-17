@@ -17,6 +17,18 @@ go-to: start_menu_2
 
 @start
 on-arrival: {!
+function generateCode() {
+    var digit1 = Math.floor(Math.random() * 10);
+    var digit2 = Math.floor(Math.random() * 10);
+    var digit3 = Math.floor(Math.random() * 10);
+    var digit4 = Math.floor(Math.random() * 10);
+
+    return digit1 + "" + digit2 + "" + digit3 + "" + digit4;
+}
+
+var code = generateCode();
+console.log(code); // e.g. "4827"
+
 Q.started = 1;
 // time elapsed (in months)
 Q.time = 1;
