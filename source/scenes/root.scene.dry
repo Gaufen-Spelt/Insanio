@@ -30,6 +30,11 @@ var code = generateCode();
 console.log(code); // e.g. "4827"
 Q.secret_code = code;
 
+Q.code_digit1 = code.digit1;
+Q.code_digit2 = code.digit2;
+Q.code_digit3 = code.digit3;
+Q.code_digit4 = code.digit4;
+
 Q.started = 1;
 // time elapsed (in months)
 Q.time = 1;
