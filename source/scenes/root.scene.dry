@@ -59,7 +59,41 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
 !}
 new-page: true
 
-- @1928_main: Begin my ways...
+- @intro: Begin my ways...
+
+@intro
+subtitle: And your soul...
+on-arrival: {!
+
+var overlay = document.createElement('div');
+overlay.id = 'game-intro-overlay';
+overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;';
+document.body.appendChild(overlay);
+
+function addLine(text, delay, style) {
+    setTimeout(function() {
+        var el = document.createElement('div');
+        el.style.cssText = 'color:#d4c89a;font-family:"Minion Pro",Georgia,serif;opacity:0;transition:opacity 1s ease;' + (style || '');
+        el.textContent = text;
+        overlay.appendChild(el);
+        setTimeout(function() { el.style.opacity = '1'; }, 50);
+    }, delay);
+}
+
+addLine('....', 400, 'font-size:3em;letter-spacing:0.2em;margin-bottom:0.5em;');
+addLine('...,', 1800, 'font-size:1.4em;letter-spacing:0.1em;');
+addLine('Status established: Heartbeat is stable.', 2800, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
+
+setTimeout(function() {
+    overlay.style.transition = 'opacity 2.5s ease';
+    overlay.style.opacity = '0';
+    setTimeout(function() {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    }, 2000);
+}, 4500);
+!}
+
+- @1928_main: And I must learn...
 
 @1928_main
 audio: shuffle music/1928_1930/FruhlingsliedMendelssohn.mp3 music/1928_1930/AUF_HOHEN_BERGEN_noise_reduced.mp3 music/1928_1930/MarekWeber.mp3 music/1928_1930/BAUERNKAPELLE.mp3 music/1928_1933/DERLINDENBAUM_normalized.mp3 music/1928_1933/ZurSonne_zurFreiheit.mp3 music/1928_1933/arbeiter_marseille.mp3 music/1928_1933/Wann_wir_schreiten_Seit_an_Seit.mp3 music/1930_1933/Internationale-de_normalized.ogg music/1928_1930/LiedDerPompadour.mp3 music/1928_1933/SozialistenMarsch.mp3
