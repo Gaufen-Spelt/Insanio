@@ -2,8 +2,10 @@ title: Next month
 set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
+Q.pinnedCardsDescription = '';
+Q.deckDescription = '';
+Q.handDescription = '';
 !}
-max-cards: 6
 
 - @maps
 - @letter
