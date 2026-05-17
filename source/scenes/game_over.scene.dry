@@ -31,12 +31,10 @@ go-to: eg_menu if started == 1; root.start_menu_2 if started == 0
 .ach-mod { padding-left: 24px; }
 h1, h2, h3 { margin-bottom: 12px; margin-top: 20px; }
 .ach-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-rows: min-content;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
   margin-bottom: 16px;
-  align-items: start;
 }
 .ach-cybersyn {
     border-left: 6px solid #00FF41;
@@ -118,16 +116,10 @@ h1, h2, h3 { margin-bottom: 12px; margin-top: 20px; }
       if (items.length === 0) return;
       var grid = document.createElement('div');
       grid.className = 'ach-grid';
-      var col1 = document.createElement('div');
-      col1.style.cssText = 'display:flex;flex-direction:column;gap:6px;';
-      var col2 = document.createElement('div');
-      col2.style.cssText = 'display:flex;flex-direction:column;gap:6px;';
-      items.forEach(function(el, i) {
+      items.forEach(function(el) {
         el.parentNode.removeChild(el);
-        (i % 2 === 0 ? col1 : col2).appendChild(el);
+        grid.appendChild(el);
       });
-      grid.appendChild(col1);
-      grid.appendChild(col2);
       section.appendChild(grid);
     });
   }
