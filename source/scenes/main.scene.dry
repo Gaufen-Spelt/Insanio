@@ -10,9 +10,11 @@ max-cards: 6
 
 @maps
 title: Select Maps
-is-card: true
 is-deck: true
 new-page: true
+go-to: selector 
+
+@selector
 
 = Selection
 
