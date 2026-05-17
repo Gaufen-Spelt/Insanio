@@ -13,27 +13,6 @@
     ui = dendryUI;
     game = ui.game;
 
-    window.displayPinnedCards = function(cards) {
-    if (cards.length === 0) return null;
-
-    // No <hr> — skip the engine's default which adds one
-    var $cardsEl = $('<ul>').addClass('pinned-cards');
-    for (var card of cards) {
-        var $cardEl = $('<li>').addClass('pinned-card');
-        var $cardLink = $('<a>').addClass('card').attr({href: '#', 'card-id': card.id, title: card.title});
-        var $title = $('<span>').addClass('card-caption').text(card.title);
-        if (card.image) {
-            $cardLink.append($('<img>').addClass('card-img').attr({src: card.image}));
-        }
-        if (card.subtitle) {
-            $cardLink.append($('<span>').addClass('card-tooltip').text(card.subtitle));
-        }
-        $cardEl.append($cardLink).append($title);
-        $cardsEl.append($cardEl);
-    }
-    $('#content').append($cardsEl);
-};
-
     // Add your custom code here.
   };
 
@@ -178,6 +157,27 @@
         $('#light_mode')[0].checked = true;
     }
   };
+
+  window.displayPinnedCards = function(cards) {
+    if (cards.length === 0) return null;
+
+    // No <hr> — skip the engine's default which adds one
+    var $cardsEl = $('<ul>').addClass('pinned-cards');
+    for (var card of cards) {
+        var $cardEl = $('<li>').addClass('pinned-card');
+        var $cardLink = $('<a>').addClass('card').attr({href: '#', 'card-id': card.id, title: card.title});
+        var $title = $('<span>').addClass('card-caption').text(card.title);
+        if (card.image) {
+            $cardLink.append($('<img>').addClass('card-img').attr({src: card.image}));
+        }
+        if (card.subtitle) {
+            $cardLink.append($('<span>').addClass('card-tooltip').text(card.subtitle));
+        }
+        $cardEl.append($cardLink).append($title);
+        $cardsEl.append($cardEl);
+    }
+    $('#content').append($cardsEl);
+};
 
   
   // This function allows you to modify the text before it's displayed.
