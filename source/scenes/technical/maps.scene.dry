@@ -1,0 +1,11 @@
+title: Map Selections
+new-page: true
+is-card: true
+is-pinned-card: true
+
+= Selection
+
+Select any map.
+
+- #map
+- @root: Back
