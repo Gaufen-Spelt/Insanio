@@ -34,11 +34,12 @@ on-arrival: {!
     btn.style.cssText = 'font-family:inherit; background:none; border:1px solid #876; color:var(--text-color); padding:0.3em 0.8em; cursor:pointer;';
     btn.addEventListener('click', function() {
         var entered = digits.join('');
-        if (entered === String(secret_code)) {
-            Q.door_open = 1;
+        var secret = window.dendryUI.dendryEngine.state.qualities.secret_code;
+        if (entered === String(secret)) {
+            window.dendryUI.dendryEngine.state.qualities.door_open = 1;
             window.dendryUI.dendryEngine.goToScene('door_result');
         } else {
-            Q.door_open = 0;
+            window.dendryUI.dendryEngine.state.qualities.door_open = 0;
         }
     });
 
