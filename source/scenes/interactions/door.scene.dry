@@ -1,0 +1,58 @@
+title: The Door
+subtitle: It has some sort of encryption...
+tags: inter
+
+= Door
+
+- @open: Enter the code
+
+@open
+on-arrival: {!
+    var digits = ['', '', '', ''];
+    var container = document.createElement('div');
+    container.style.cssText = 'margin:1em 0; display:flex; gap:0.5em; align-items:center;';
+
+    for (var i = 0; i < 4; i++) {
+        (function(index) {
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.maxLength = 1;
+            input.style.cssText = 'width:2em; height:2em; text-align:center; font-size:1.2em; font-family:inherit; border:1px solid #876; background:var(--content-bg-color); color:var(--text-color);';
+            input.addEventListener('input', function() {
+                digits[index] = this.value.replace(/[^0-9]/g, '');
+                this.value = digits[index];
+                if (digits[index] && index < 3) {
+                    container.querySelectorAll('input')[index + 1].focus();
+                }
+            });
+            container.appendChild(input);
+        })(i);
+    }
+
+    var btn = document.createElement('button');
+    btn.textContent = 'Confirm';
+    btn.style.cssText = 'font-family:inherit; background:none; border:1px solid #876; color:var(--text-color); padding:0.3em 0.8em; cursor:pointer;';
+    btn.addEventListener('click', function() {
+        var entered = digits.join('');
+        if (entered === String(code)) {
+            Q.door_open = 1;
+            window.dendryUI.dendryEngine.goToScene('door_result');
+        } else {
+            Q.door_open = 0;
+        }
+    });
+
+    container.appendChild(btn);
+    document.getElementById('content').appendChild(container);
+    container.querySelectorAll('input')[0].focus();
+!}
+
+= Door Code.
+
+Code.
+
+[+ code +]
+
+@door_result
+
+= World is crumbling.
