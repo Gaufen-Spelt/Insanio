@@ -96,12 +96,20 @@ Q.handDescription = '.';
 
 <script>
 (function(){
+  // Guard: if inv already exists from game.js, just re-render into the
+  // freshly injected DOM and exit. Avoids double-init on every scene load.
+  if (window.inv && window.inv._render) {
+    window.inv._render();
+    return;
+  }
+
   var _items = [];
   var _filter = '';
 
   function render() {
-    var q = _filter.toLowerCase();
     var tbody = document.getElementById('inv-body');
+    if (!tbody) return; // DOM not ready yet, skip
+    var q = _filter.toLowerCase();
     var visible = _items.filter(function(i) {
       return i.name.toLowerCase().includes(q) || (i.cat||'').toLowerCase().includes(q);
     });
@@ -116,42 +124,41 @@ Q.handDescription = '.';
       '<tr><td colspan="3" style="color:#333;padding:14px 10px;">No items.</td></tr>';
 
     var total = _items.reduce(function(s,i){ return s + i.qty; }, 0);
-    document.getElementById('inv-status').textContent =
+    var status = document.getElementById('inv-status');
+    if (status) status.textContent =
       _items.length + ' item' + (_items.length !== 1 ? 's' : '') + ' · ' + total + ' units total';
   }
 
-  document.getElementById('inv-search').addEventListener('input', function() {
-    _filter = this.value; render();
-  });
+  function attachSearch() {
+    var el = document.getElementById('inv-search');
+    if (!el) return;
+    el.addEventListener('input', function() { _filter = this.value; render(); });
+  }
 
-  // ── Persist into Dendry quality then trigger autosave ────────────
   function _persist() {
-    if (window.dendryUI && window.dendryUI.dendryEngine) {
-      window.dendryUI.dendryEngine.state.qualities.inv_data = JSON.stringify(_items);
-      // Mirror autosave cadence: only persist outside root/special scenes
-      var scene = window.dendryUI.dendryEngine.state.sceneId;
-      if (scene && scene !== 'root' && !scene.startsWith('library') && !scene.startsWith('mod_loader')) {
-        window.dendryUI.autosave();
-      }
+    if (!window.dendryUI || !window.dendryUI.dendryEngine) return;
+    window.dendryUI.dendryEngine.state.qualities.inv_data = JSON.stringify(_items);
+    var scene = window.dendryUI.dendryEngine.state.sceneId;
+    if (scene && scene !== 'root' &&
+        !scene.startsWith('library') && !scene.startsWith('mod_loader')) {
+      window.dendryUI.autosave();
     }
   }
 
-  // ── Public API ───────────────────────────────────────────────────
   window.inv = {
+    _render: function() { attachSearch(); render(); },
 
     add: function(name, qty, cat) {
       qty = qty || 1;
-      var existing = _items.find(function(i){ return i.name === name; });
-      if (existing) { existing.qty += qty; }
+      var ex = _items.find(function(i){ return i.name === name; });
+      if (ex) { ex.qty += qty; }
       else { _items.push({ name: name, qty: qty, cat: cat || '' }); }
       render(); _persist();
     },
-
     remove: function(name) {
       _items = _items.filter(function(i){ return i.name !== name; });
       render(); _persist();
     },
-
     adjust: function(name, delta) {
       var item = _items.find(function(i){ return i.name === name; });
       if (!item) return;
@@ -159,7 +166,6 @@ Q.handDescription = '.';
       if (item.qty === 0) _items = _items.filter(function(i){ return i.name !== name; });
       render(); _persist();
     },
-
     set: function(name, qty, cat) {
       var item = _items.find(function(i){ return i.name === name; });
       if (item) {
@@ -170,46 +176,19 @@ Q.handDescription = '.';
       }
       render(); _persist();
     },
-
     qty: function(name) {
       var item = _items.find(function(i){ return i.name === name; });
       return item ? item.qty : 0;
     },
-
     has: function(name) { return window.inv.qty(name) > 0; },
-
     clear: function() { _items = []; render(); _persist(); },
-
-    // Called internally on load — does NOT trigger autosave
     _restore: function(str) {
       try { _items = JSON.parse(str) || []; } catch(e) { _items = []; }
       render();
     }
   };
 
-  // ── Hook into existing onNewPage & restore on load ───────────────
-  // Wrap onNewPage so inv persists on every new page, same as autosave.
-  var _origNewPage = window.onNewPage;
-  window.onNewPage = function() {
-    if (_origNewPage) _origNewPage();
-    // Sync quality in case Dendry scenes modify inv_data directly
-    var q = window.dendryUI &&
-            window.dendryUI.dendryEngine.state.qualities.inv_data;
-    if (q && q !== JSON.stringify(_items)) {
-      window.inv._restore(q);
-    }
-  };
-
-  // Restore inventory whenever a save slot is loaded.
-  // game.js has no existing window.onLoad, so we define it here.
-  // If you add your own window.onLoad later, call inv._restore() inside it.
-  window.onLoad = function() {
-    window.justLoaded = true; // matches game.js flag
-    var q = window.dendryUI &&
-            window.dendryUI.dendryEngine.state.qualities.inv_data;
-    if (q) window.inv._restore(q);
-  };
-
+  attachSearch();
   render();
 })();
 </script>
