@@ -12,4 +12,3 @@ As such, [+ code_digit1 +] is the answer.
 
 @crowbar 
 on-arrival: crowbar = 1
-go-to: room_1
