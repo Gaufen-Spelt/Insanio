@@ -14,13 +14,12 @@
   game = ui.game;
 
   // Restore inventory when a save slot is loaded
-  var _origOnLoad = window.onLoad;
   window.onLoad = function() {
     window.justLoaded = true;
-    if (_origOnLoad) _origOnLoad();
     var q = window.dendryUI.dendryEngine.state.qualities.inv_data;
     if (q && window.inv) window.inv._restore(q);
   };
+
 
   // Sync inv display on every new page (catches Dendry-side quality changes)
   var _origNewPage = window.onNewPage;
