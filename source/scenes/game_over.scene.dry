@@ -15,6 +15,7 @@ this.achieve('game_completed');
 @eg_menu
 
 - @end_game: End game.
+- @achievements
 
 @achievements
 title: Achievements
