@@ -128,11 +128,31 @@ h1, h2, h3 { margin-bottom: 12px; margin-top: 20px; }
 {!<div class="ach ach-locked"><span class="ach-icon"></span><strong>Vent</strong> - Pathway.</div>!}
 ?]
 
+{!</div>!}
+
+= Endings
+
+{!<div class="ach-section">!}
+
 [? if achievement_ending :
 {!<div class="ach" style="border-color:#9b59b6; background:rgba(155,89,182,0.15)"><span class="ach-icon" style="background:#9b59b6"></span><strong>Inevitable</strong> - Learn the truth.!}[? if game_achievement_ending : {!<span class="ach-new">New!</span>!}?]{!</div>!}
 ?]
 [? if not achievement_ending :
 {!<div class="ach ach-locked"><span class="ach-icon"></span><strong>Inevitable</strong> - Learn the truth.</div>!}
+?]
+
+[? if achievement_indeemable :
+{!<div class="ach" style="border-color:#9b59b6; background:rgba(155,89,182,0.15)"><span class="ach-icon" style="background:#9b59b6"></span><strong>Indeemable</strong> - For how all this is wasteland.!}[? if game_achievement_indeemable : {!<span class="ach-new">New!</span>!}?]{!</div>!}
+?]
+[? if not achievement_indeemable :
+{!<div class="ach ach-locked"><span class="ach-icon"></span><strong>Indeemable</strong> - For how all this is wasteland.</div>!}
+?]
+
+[? if achievement_sacrificial :
+{!<div class="ach" style="border-color:#9b59b6; background:rgba(155,89,182,0.15)"><span class="ach-icon" style="background:#9b59b6"></span><strong>Last Stand</strong> - Bring the end to inevitable.!}[? if game_achievement_sacrificial : {!<span class="ach-new">New!</span>!}?]{!</div>!}
+?]
+[? if not achievement_sacrificial :
+{!<div class="ach ach-locked"><span class="ach-icon"></span><strong>Last Stand</strong> - Bring the end to inevitable.</div>!}
 ?]
 
 {!</div>!}
