@@ -9,9 +9,16 @@ Progress: Zero
 Location: [+ location +]
 
 @politics
+on-arrival: {!
+// Restore inventory from saved quality on scene arrival
+  if (window.inv && Q.inv_data) {
+    window.inv._restore(Q.inv_data);
+  }
+!}
 
 
-{!<style>
+{!
+<style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap');
 
   #inv-wrap {
@@ -100,8 +107,8 @@ Location: [+ location +]
 
 <script>
 (function(){
-  // Guard: if inv already exists from game.js, just re-render into the
-  // freshly injected DOM and exit. Avoids double-init on every scene load.
+  // If inv already initialised, just re-attach search and re-render
+  // into the freshly injected DOM, then exit.
   if (window.inv && window.inv._render) {
     window.inv._render();
     return;
@@ -112,7 +119,7 @@ Location: [+ location +]
 
   function render() {
     var tbody = document.getElementById('inv-body');
-    if (!tbody) return; // DOM not ready yet, skip
+    if (!tbody) return;
     var q = _filter.toLowerCase();
     var visible = _items.filter(function(i) {
       return i.name.toLowerCase().includes(q) || (i.cat||'').toLowerCase().includes(q);
@@ -139,13 +146,11 @@ Location: [+ location +]
     el.addEventListener('input', function() { _filter = this.value; render(); });
   }
 
-  function _persist() {
-    if (!window.dendryUI || !window.dendryUI.dendryEngine) return;
-    window.dendryUI.dendryEngine.state.qualities.inv_data = JSON.stringify(_items);
-    var scene = window.dendryUI.dendryEngine.state.sceneId;
-    if (scene && scene !== 'root' &&
-        !scene.startsWith('library') && !scene.startsWith('mod_loader')) {
-      window.dendryUI.autosave();
+  // Writes _items back into Q.inv_data only — no autosave call.
+  // Autosave is already handled by onNewPage in game.js.
+  function _syncQuality() {
+    if (window.dendryUI && window.dendryUI.dendryEngine) {
+      window.dendryUI.dendryEngine.state.qualities.inv_data = JSON.stringify(_items);
     }
   }
 
@@ -157,19 +162,22 @@ Location: [+ location +]
       var ex = _items.find(function(i){ return i.name === name; });
       if (ex) { ex.qty += qty; }
       else { _items.push({ name: name, qty: qty, cat: cat || '' }); }
-      render(); _persist();
+      render(); _syncQuality();
     },
+
     remove: function(name) {
       _items = _items.filter(function(i){ return i.name !== name; });
-      render(); _persist();
+      render(); _syncQuality();
     },
+
     adjust: function(name, delta) {
       var item = _items.find(function(i){ return i.name === name; });
       if (!item) return;
       item.qty = Math.max(0, item.qty + delta);
       if (item.qty === 0) _items = _items.filter(function(i){ return i.name !== name; });
-      render(); _persist();
+      render(); _syncQuality();
     },
+
     set: function(name, qty, cat) {
       var item = _items.find(function(i){ return i.name === name; });
       if (item) {
@@ -178,14 +186,18 @@ Location: [+ location +]
       } else {
         if (qty > 0) _items.push({ name: name, qty: qty, cat: cat || '' });
       }
-      render(); _persist();
+      render(); _syncQuality();
     },
+
     qty: function(name) {
       var item = _items.find(function(i){ return i.name === name; });
       return item ? item.qty : 0;
     },
+
     has: function(name) { return window.inv.qty(name) > 0; },
-    clear: function() { _items = []; render(); _persist(); },
+
+    clear: function() { _items = []; render(); _syncQuality(); },
+
     _restore: function(str) {
       try { _items = JSON.parse(str) || []; } catch(e) { _items = []; }
       render();
@@ -195,7 +207,8 @@ Location: [+ location +]
   attachSearch();
   render();
 })();
-</script>!}
+</script>
+!}
 
 @paramilitaries
 
