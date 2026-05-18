@@ -2,6 +2,7 @@ title: The Door
 subtitle: It has some sort of encryption...
 tags: inter
 new-page: true
+go-to: door_open if door_open = 1
 
 = Door
 
@@ -78,8 +79,23 @@ on-display: {!
 - @door: Back
 
 @door_result
-go-to: open if door_open = 0
+go-to: open if door_open = 0; door_open if door_open = 1
 
-= World.
+@door_open
+achievement: doorkey
 
-Open.
+= Door has been unlocked...
+
+Now's the time to learn the truth.
+
+- @end_1: Enter the other side.
+- @interactions: Back down.
+
+@end_1
+achievement: ending
+
+= Lost in shadows
+
+As the result, there was no shade but doom.
+
+- @game_over: Nice ending.
