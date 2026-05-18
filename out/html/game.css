@@ -565,6 +565,49 @@ a.card:hover .card-tooltip {
 }
 
 
+
+
+/* INVENTARY */
+
+#inv-panel {
+  margin: .8em .4em 0;
+  border-top: 1px solid rgba(122,92,58,.25);
+  padding-top: .6em;
+}
+.inv-title {
+  font-size: .72em;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  color: #7a5c3a;
+  margin: 0 0 .5em;
+  font-weight: normal;
+}
+body.dark-mode .inv-title { color: #c9a96e; }
+.inv-list { list-style:none; margin:0; padding:0; }
+.inv-item {
+  display: flex;
+  align-items: center;
+  gap: .45em;
+  padding: .2em .3em;
+  border-radius: 3px;
+  font-size: .85em;
+}
+.inv-item:hover { background: rgba(122,92,58,.07); }
+.inv-icon { width:1.4em; text-align:center; flex-shrink:0; }
+.inv-name { flex:1; }
+.inv-qty {
+  font-size: .72em;
+  background: #7a5c3a;
+  color: #fff8ee;
+  border-radius: 9px;
+  padding: 0 .45em;
+  min-width: 1.6em;
+  text-align: center;
+}
+body.dark-mode .inv-qty { background: #c9a96e; color: #1a1008; }
+.inv-empty { font-size:.82em; font-style:italic; opacity:.45; padding:.2em .3em; }
+
+
 /* =============================================
    PARTY SEAT COLORS
    ============================================= */
