@@ -12,26 +12,6 @@
   var main = function(dendryUI) {
   ui = dendryUI;
   game = ui.game;
-
-  // Restore inventory when a save slot is loaded
-  var _origOnLoad = window.onLoad;
-  window.onLoad = function() {
-    window.justLoaded = true;
-    if (_origOnLoad) _origOnLoad();
-    var q = window.dendryUI.dendryEngine.state.qualities.inv_data;
-    if (q && window.inv) window.inv._restore(q);
-  };
-
-  // Sync inv display on every new page (catches Dendry-side quality changes)
-  var _origNewPage = window.onNewPage;
-  window.onNewPage = function() {
-    if (_origNewPage) _origNewPage();
-    if (!window.inv) return;
-    var q = window.dendryUI.dendryEngine.state.qualities.inv_data;
-    if (q && q !== JSON.stringify(window.inv._items)) {
-      window.inv._restore(q);
-    }
-  };
 };
 
   var TITLE = "Social Democracy: An Alternate History" + '_' + "Autumn Chen";
