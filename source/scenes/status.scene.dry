@@ -9,13 +9,6 @@ Progress: Zero
 Location: [+ location +]
 
 @politics
-on-arrival: {!
-// Restore inventory from saved quality on scene arrival
-  if (window.inv && Q.inv_data) {
-    window.inv._restore(Q.inv_data);
-  }
-!}
-
 
 {!
 <style>
