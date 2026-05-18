@@ -68,9 +68,6 @@ Q.code_digit2 = Q.digit2;
 Q.code_digit3 = Q.digit3;
 Q.code_digit4 = Q.digit4;
 Q.secret_code = "" + Q.digit1 + Q.digit2 + Q.digit3 + Q.digit4;
-
-window.inv.add('gold_coin', 3);
-
 console.log(Q.secret_code);
 !}
 new-page: true
