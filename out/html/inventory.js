@@ -212,7 +212,6 @@
   // ------------------------------------------------------------------
   function _init () {
     _injectStyles();
-    _buildPanel();
 
     // Restore from Dendry quality if a save was already loaded
     var engine = window.dendryUI && window.dendryUI.dendryEngine;
