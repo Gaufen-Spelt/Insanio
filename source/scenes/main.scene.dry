@@ -6,6 +6,225 @@ Q.deckDescription = '.';
 Q.handDescription = '.';
 !}
 
+{!
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  #inv-wrap {
+    font-family: 'IBM Plex Mono', monospace;
+    background: #0f0f0f;
+    color: #e0e0e0;
+    border: 1px solid #333;
+    padding: 24px;
+    max-width: 560px;
+    margin: 40px auto;
+  }
+  #inv-wrap h2 {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #888;
+    margin: 0 0 20px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 10px;
+  }
+  #inv-search {
+    width: 100%;
+    box-sizing: border-box;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-bottom: none;
+    color: #e0e0e0;
+    font-family: inherit;
+    font-size: 12px;
+    padding: 7px 10px;
+    outline: none;
+  }
+  #inv-search:focus { border-color: #5fffb0; }
+  #inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  #inv-table th {
+    text-align: left;
+    padding: 7px 10px;
+    background: #161616;
+    color: #555;
+    font-weight: 400;
+    letter-spacing: 2px;
+    font-size: 10px;
+    text-transform: uppercase;
+    border: 1px solid #222;
+  }
+  #inv-table td {
+    padding: 7px 10px;
+    border: 1px solid #1e1e1e;
+    vertical-align: middle;
+  }
+  #inv-table tr:hover td { background: #161616; }
+  .inv-qty { color: #5fffb0; font-weight: 600; }
+  .inv-low { color: #ff5f5f !important; }
+  .inv-tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    border: 1px solid #333;
+    color: #666;
+    text-transform: uppercase;
+  }
+  #inv-status {
+    margin-top: 14px;
+    font-size: 10px;
+    color: #444;
+    letter-spacing: 1px;
+  }
+</style>
+
+<div id="inv-wrap">
+  <h2>Inventory</h2>
+  <input id="inv-search" placeholder="Search…" />
+  <table id="inv-table">
+    <thead>
+      <tr><th>Item</th><th>Tag</th><th>Qty</th></tr>
+    </thead>
+    <tbody id="inv-body"></tbody>
+  </table>
+  <div id="inv-status"></div>
+</div>
+
+<script>
+(function(){
+  // ── Internal state ──────────────────────────────────────────────
+  var _items = [];
+  var _filter = '';
+
+  // ── Render ──────────────────────────────────────────────────────
+  function render() {
+    var q = _filter.toLowerCase();
+    var tbody = document.getElementById('inv-body');
+    var visible = _items.filter(function(i) {
+      return i.name.toLowerCase().includes(q) || (i.cat||'').toLowerCase().includes(q);
+    });
+    tbody.innerHTML = visible.length ? visible.map(function(item) {
+      var low = item.qty < 3;
+      return '<tr>' +
+        '<td>' + item.name + '</td>' +
+        '<td><span class="inv-tag">' + (item.cat || '—') + '</span></td>' +
+        '<td class="inv-qty' + (low ? ' inv-low' : '') + '">' + item.qty + '</td>' +
+        '</tr>';
+    }).join('') :
+      '<tr><td colspan="3" style="color:#333;padding:14px 10px;">No items found.</td></tr>';
+
+    var total = _items.reduce(function(s,i){ return s + i.qty; }, 0);
+    document.getElementById('inv-status').textContent =
+      _items.length + ' item' + (_items.length !== 1 ? 's' : '') + ' · ' + total + ' units total';
+  }
+
+  document.getElementById('inv-search').addEventListener('input', function() {
+    _filter = this.value;
+    render();
+  });
+
+  // ── Persistence: serialise / deserialise ─────────────────────────
+  // Call inv.serialise() to get a JSON string to embed in your Dendry quality.
+  // Call inv.load(str) to restore from that string (e.g. inside window.onLoad).
+
+  // ── Public API ───────────────────────────────────────────────────
+  window.inv = {
+
+    // Add a new item or increase qty if it already exists.
+    // inv.add('Rope', 3, 'tools')
+    add: function(name, qty, cat) {
+      qty = qty || 1;
+      var existing = _items.find(function(i){ return i.name === name; });
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        _items.push({ name: name, qty: qty, cat: cat || '' });
+      }
+      render();
+    },
+
+    // Remove an item entirely by name.
+    // inv.remove('Rope')
+    remove: function(name) {
+      _items = _items.filter(function(i){ return i.name !== name; });
+      render();
+    },
+
+    // Adjust qty of an existing item by delta (positive or negative).
+    // Removes the item automatically if qty reaches 0.
+    // inv.adjust('Rope', -1)
+    adjust: function(name, delta) {
+      var item = _items.find(function(i){ return i.name === name; });
+      if (!item) return;
+      item.qty = Math.max(0, item.qty + delta);
+      if (item.qty === 0) {
+        _items = _items.filter(function(i){ return i.name !== name; });
+      }
+      render();
+    },
+
+    // Set qty of an item directly. Creates it if it doesn't exist.
+    // inv.set('Rope', 5)
+    set: function(name, qty, cat) {
+      var item = _items.find(function(i){ return i.name === name; });
+      if (item) {
+        item.qty = Math.max(0, qty);
+        if (item.qty === 0) _items = _items.filter(function(i){ return i.name !== name; });
+      } else {
+        if (qty > 0) _items.push({ name: name, qty: qty, cat: cat || '' });
+      }
+      render();
+    },
+
+    // Check qty of a named item (returns 0 if not present).
+    // var n = inv.qty('Rope')
+    qty: function(name) {
+      var item = _items.find(function(i){ return i.name === name; });
+      return item ? item.qty : 0;
+    },
+
+    // Check if item exists and qty > 0.
+    // inv.has('Rope')
+    has: function(name) {
+      return inv.qty(name) > 0;
+    },
+
+    // Clear everything.
+    // inv.clear()
+    clear: function() {
+      _items = [];
+      render();
+    },
+
+    // ── Persistence ────────────────────────────────────────────────
+
+    // Returns a compact JSON string — store this in a Dendry quality string.
+    // var s = inv.serialise()
+    serialise: function() {
+      return JSON.stringify(_items);
+    },
+
+    // Restore inventory from a JSON string (call inside window.onLoad).
+    // inv.load(savedString)
+    load: function(str) {
+      try {
+        _items = JSON.parse(str) || [];
+      } catch(e) {
+        _items = [];
+      }
+      render();
+    }
+  };
+
+  render();
+})();
+</script>
+!}
+
 - @maps
 - @interactions
 - @letter
