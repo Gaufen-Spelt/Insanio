@@ -96,11 +96,9 @@ Q.handDescription = '.';
 
 <script>
 (function(){
-  // ── Internal state ──────────────────────────────────────────────
   var _items = [];
   var _filter = '';
 
-  // ── Render ──────────────────────────────────────────────────────
   function render() {
     var q = _filter.toLowerCase();
     var tbody = document.getElementById('inv-body');
@@ -115,7 +113,7 @@ Q.handDescription = '.';
         '<td class="inv-qty' + (low ? ' inv-low' : '') + '">' + item.qty + '</td>' +
         '</tr>';
     }).join('') :
-      '<tr><td colspan="3" style="color:#333;padding:14px 10px;">No items found.</td></tr>';
+      '<tr><td colspan="3" style="color:#333;padding:14px 10px;">No items.</td></tr>';
 
     var total = _items.reduce(function(s,i){ return s + i.qty; }, 0);
     document.getElementById('inv-status').textContent =
@@ -123,52 +121,45 @@ Q.handDescription = '.';
   }
 
   document.getElementById('inv-search').addEventListener('input', function() {
-    _filter = this.value;
-    render();
+    _filter = this.value; render();
   });
 
-  // ── Persistence: serialise / deserialise ─────────────────────────
-  // Call inv.serialise() to get a JSON string to embed in your Dendry quality.
-  // Call inv.load(str) to restore from that string (e.g. inside window.onLoad).
+  // ── Persist into Dendry quality then trigger autosave ────────────
+  function _persist() {
+    if (window.dendryUI && window.dendryUI.dendryEngine) {
+      window.dendryUI.dendryEngine.state.qualities.inv_data = JSON.stringify(_items);
+      // Mirror autosave cadence: only persist outside root/special scenes
+      var scene = window.dendryUI.dendryEngine.state.sceneId;
+      if (scene && scene !== 'root' && !scene.startsWith('library') && !scene.startsWith('mod_loader')) {
+        window.dendryUI.autosave();
+      }
+    }
+  }
 
   // ── Public API ───────────────────────────────────────────────────
   window.inv = {
 
-    // Add a new item or increase qty if it already exists.
-    // inv.add('Rope', 3, 'tools')
     add: function(name, qty, cat) {
       qty = qty || 1;
       var existing = _items.find(function(i){ return i.name === name; });
-      if (existing) {
-        existing.qty += qty;
-      } else {
-        _items.push({ name: name, qty: qty, cat: cat || '' });
-      }
-      render();
+      if (existing) { existing.qty += qty; }
+      else { _items.push({ name: name, qty: qty, cat: cat || '' }); }
+      render(); _persist();
     },
 
-    // Remove an item entirely by name.
-    // inv.remove('Rope')
     remove: function(name) {
       _items = _items.filter(function(i){ return i.name !== name; });
-      render();
+      render(); _persist();
     },
 
-    // Adjust qty of an existing item by delta (positive or negative).
-    // Removes the item automatically if qty reaches 0.
-    // inv.adjust('Rope', -1)
     adjust: function(name, delta) {
       var item = _items.find(function(i){ return i.name === name; });
       if (!item) return;
       item.qty = Math.max(0, item.qty + delta);
-      if (item.qty === 0) {
-        _items = _items.filter(function(i){ return i.name !== name; });
-      }
-      render();
+      if (item.qty === 0) _items = _items.filter(function(i){ return i.name !== name; });
+      render(); _persist();
     },
 
-    // Set qty of an item directly. Creates it if it doesn't exist.
-    // inv.set('Rope', 5)
     set: function(name, qty, cat) {
       var item = _items.find(function(i){ return i.name === name; });
       if (item) {
@@ -177,47 +168,46 @@ Q.handDescription = '.';
       } else {
         if (qty > 0) _items.push({ name: name, qty: qty, cat: cat || '' });
       }
-      render();
+      render(); _persist();
     },
 
-    // Check qty of a named item (returns 0 if not present).
-    // var n = inv.qty('Rope')
     qty: function(name) {
       var item = _items.find(function(i){ return i.name === name; });
       return item ? item.qty : 0;
     },
 
-    // Check if item exists and qty > 0.
-    // inv.has('Rope')
-    has: function(name) {
-      return inv.qty(name) > 0;
-    },
+    has: function(name) { return window.inv.qty(name) > 0; },
 
-    // Clear everything.
-    // inv.clear()
-    clear: function() {
-      _items = [];
-      render();
-    },
+    clear: function() { _items = []; render(); _persist(); },
 
-    // ── Persistence ────────────────────────────────────────────────
-
-    // Returns a compact JSON string — store this in a Dendry quality string.
-    // var s = inv.serialise()
-    serialise: function() {
-      return JSON.stringify(_items);
-    },
-
-    // Restore inventory from a JSON string (call inside window.onLoad).
-    // inv.load(savedString)
-    load: function(str) {
-      try {
-        _items = JSON.parse(str) || [];
-      } catch(e) {
-        _items = [];
-      }
+    // Called internally on load — does NOT trigger autosave
+    _restore: function(str) {
+      try { _items = JSON.parse(str) || []; } catch(e) { _items = []; }
       render();
     }
+  };
+
+  // ── Hook into existing onNewPage & restore on load ───────────────
+  // Wrap onNewPage so inv persists on every new page, same as autosave.
+  var _origNewPage = window.onNewPage;
+  window.onNewPage = function() {
+    if (_origNewPage) _origNewPage();
+    // Sync quality in case Dendry scenes modify inv_data directly
+    var q = window.dendryUI &&
+            window.dendryUI.dendryEngine.state.qualities.inv_data;
+    if (q && q !== JSON.stringify(_items)) {
+      window.inv._restore(q);
+    }
+  };
+
+  // Restore inventory whenever a save slot is loaded.
+  // game.js has no existing window.onLoad, so we define it here.
+  // If you add your own window.onLoad later, call inv._restore() inside it.
+  window.onLoad = function() {
+    window.justLoaded = true; // matches game.js flag
+    var q = window.dendryUI &&
+            window.dendryUI.dendryEngine.state.qualities.inv_data;
+    if (q) window.inv._restore(q);
   };
 
   render();
