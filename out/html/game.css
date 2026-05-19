@@ -572,7 +572,7 @@ a.card:hover .card-tooltip {
    INTRO OVERLAY
    ============================================= */
 
-##intro-overlay {
+#intro-overlay {
   position: fixed;
   inset: 0;
   z-index: 999;
