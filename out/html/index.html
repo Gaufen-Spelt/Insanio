@@ -16,6 +16,23 @@
 </head>
 <body>
 
+  <svg width="0" height="0" style="position:absolute">
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.75"
+                  numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feBlend in="SourceGraphic" mode="overlay" result="blend"/>
+    <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+  </filter>
+  </svg>
+
+  <!-- Intro overlay -->
+<div id="intro-overlay">
+  <div id="intro-inner">
+    <div id="intro-symbol">&#10041;</div>
+  </div>
+</div>
+
   <!-- Background layers -->
   <div class="background" id="bg2"></div>
   <div class="background" id="bg1"></div>
@@ -71,6 +88,15 @@
           <td><label for="dark_mode">Dark mode</label></td>
           <td><input type="radio" id="dark_mode" name="ld_mode" value="0" onclick="window.enableDarkMode();"></td>
         </tr>
+        <tr><td><hr></td></tr>
+        <tr>
+  <td>Intro:</td>
+  <td><label for="intro_yes">On</label></td>
+  <td><input type="radio" id="intro_yes" name="intro" value="1" onclick="window.enableIntro();"></td>
+  <td><label for="intro_no">Off</label></td>
+  <td><input type="radio" id="intro_no" name="intro" value="0" onclick="window.disableIntro();"></td>
+</tr>
+<tr><td><hr></td></tr>
         <tr>
           <td><button onclick="window.hideOptions();">Close</button></td>
           <td></td><td></td><td></td>
