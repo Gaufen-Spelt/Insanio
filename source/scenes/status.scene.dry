@@ -13,3 +13,12 @@ Location: [+ location +]
 @paramilitaries
 
 @polls
+
+= Inventory
+
+Screwdriver: [+ screwdriver +] <br>
+Crowbar: [+ crowbar +] <br>
+Hammer: [+ hammer +] <br>
+Keycard Level 1: [+ k_l1 +] <br>
+Key A1: [+ key_a1 +] <br>
+Key A2: [+ key_a2 +] <br>
