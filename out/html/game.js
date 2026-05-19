@@ -162,6 +162,7 @@
     } else {
         $('#light_mode')[0].checked = true;
     }
+    window.populateIntroOption();
   };
 
   window.displayPinnedCards = function(cards) {
@@ -348,7 +349,61 @@ window.showSidebarAndNotebook = function() {
         document.body.classList.add('dark-mode');
     }
     window.pinnedCardsDescription = "Advisor cards - actions are only usable once per 6 months.";
-    window.hideSidebarAndNotebook();  // ← add this line
+    window.hideSidebarAndNotebook();
+
+    // Show intro unless disabled
+    var introDisabled = false;
+    try { introDisabled = localStorage.getItem('intro_disabled') === '1'; } catch(e) {}
+    if (introDisabled) {
+        document.getElementById('intro-overlay').style.display = 'none';
+    } else {
+        window.startIntro();
+    }
+
+    // Sync options radio
+    window.populateIntroOption();
+};
+
+window.startIntro = function() {
+    var overlay = document.getElementById('intro-overlay');
+    overlay.style.display = 'flex';
+    overlay.style.opacity = '1';
+
+    var dismissed = false;
+    var dismiss = function() {
+        if (dismissed) return;
+        dismissed = true;
+        overlay.classList.add('fade-out');
+        setTimeout(function() {
+            overlay.style.display = 'none';
+        }, 1900);
+    };
+
+    // Dismiss on click or keypress
+    overlay.addEventListener('click', dismiss);
+    document.addEventListener('keydown', dismiss, { once: true });
+
+    // Auto-dismiss after 12 seconds
+    setTimeout(dismiss, 12000);
+};
+
+window.enableIntro = function() {
+    try { localStorage.removeItem('intro_disabled'); } catch(e) {}
+};
+
+window.disableIntro = function() {
+    try { localStorage.setItem('intro_disabled', '1'); } catch(e) {}
+};
+
+window.populateIntroOption = function() {
+    var introDisabled = false;
+    try { introDisabled = localStorage.getItem('intro_disabled') === '1'; } catch(e) {}
+    var yes = document.getElementById('intro_yes');
+    var no  = document.getElementById('intro_no');
+    if (yes && no) {
+        yes.checked = !introDisabled;
+        no.checked  =  introDisabled;
+    }
 };
 
 }());
