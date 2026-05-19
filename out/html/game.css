@@ -603,6 +603,30 @@ a.card:hover .card-tooltip {
   100% { opacity: 0; }
 }
 
+#intro-overlay.intro-ending::after {
+  opacity: 1;
+}
+
+#intro-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.15) 0px,
+    rgba(0,0,0,0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#intro-overlay.fade-out::after {
+  opacity: 1;
+}
+
 /* =============================================
    PARTY SEAT COLORS
    ============================================= */
