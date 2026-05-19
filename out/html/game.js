@@ -382,15 +382,41 @@ window.startIntro = function() {
     var dismissed = false;
 
     var dismiss = function() {
-        if (dismissed) return;
-        dismissed = true;
-        overlay.classList.add('fade-out');
-        setTimeout(function() { overlay.style.display = 'none'; }, 1050);
-    };
+    if (dismissed) return;
+    dismissed = true;
+    
+    // Spawn words faster briefly, then fade
+    var burst = 0;
+    var burstInterval = setInterval(function() {
+        if (burst++ > 12) {
+            clearInterval(burstInterval);
+            overlay.classList.add('fade-out');
+            setTimeout(function() { overlay.style.display = 'none'; }, 1050);
+        }
+        var el = document.createElement('span');
+        el.className = 'intro-word';
+        el.textContent = '...';
+        el.style.left = Math.random() * 90 + '%';
+        el.style.top  = Math.random() * 90 + '%';
+        el.style.fontSize = '2em';
+        el.style.animationDuration = '300ms';
+        overlay.appendChild(el);
+    }, 60);
+};
 
     overlay.addEventListener('click', dismiss);
     document.addEventListener('keydown', dismiss, { once: true });
     setTimeout(dismiss, 9000);
+
+  // Slow words down and scanlines creep in ~2s before end
+setTimeout(function() {
+    if (dismissed) return;
+    overlay.style.transition = 'opacity 1s ease';
+    // Scanlines fade in by adding a class
+    overlay.classList.add('intro-ending');
+}, 7000); // 7s into a 9s intro
+
+setTimeout(dismiss, 9000);
 
     var spawnWord = function() {
         if (dismissed) return;
