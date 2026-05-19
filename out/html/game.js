@@ -316,6 +316,16 @@ window.displayDecks = function(decks) {
       return bar;
   };
 
+  window.hideSidebarAndNotebook = function() {
+    document.getElementById('stats_sidebar').style.display = 'none';
+    document.getElementById('notebook').style.display = 'none';
+};
+
+window.showSidebarAndNotebook = function() {
+    document.getElementById('stats_sidebar').style.display = '';
+    document.getElementById('notebook').style.display = '';
+};
+
 
   window.justLoaded = true;
   window.statusTab = "status";
@@ -328,6 +338,7 @@ window.displayDecks = function(decks) {
         document.body.classList.add('dark-mode');
     }
     window.pinnedCardsDescription = "Advisor cards - actions are only usable once per 6 months.";
-  };
+    window.hideSidebarAndNotebook();  // ← add this line
+};
 
 }());
