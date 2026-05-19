@@ -71,10 +71,16 @@ console.log(Q.secret_code);
 !}
 new-page: true
 
+= Insanio
+
+And welcome to my game, mere being. As you unravel secrets of this world, the more you will need to rethink your ways of doing such. Be creative in your way. There is nothing between you and all this - just simplest form of deduction, given simplest is what I consider it as such.
+
+Bear yourself.
+
 - @intro: Begin my ways...
 
 @intro
-subtitle: And your soul...
+subtitle: And your soul... <br> is undeniably here.
 set-bg: images/insignia.png
 on-arrival: {!
 
@@ -96,8 +102,8 @@ function addLine(text, delay, style) {
 addLine('...', 400, 'font-size:3em;letter-spacing:0.2em;margin-bottom:0.5em;');
 addLine('...', 1800, 'font-size:1.4em;letter-spacing:0.1em;');
 addLine('Status established: Heartbeat is stable.', 2800, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
-addLine('Survivor count: Two.', 2800, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
-addLine('Task: No specific variable given..', 2800, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
+addLine('Survivor count: Two.', 3600, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.1em;');
+addLine('Task: No specific variable given..', 4000, 'font-size:1.4em;letter-spacing:0.1em;margin-top:0.3em;');
 
 setTimeout(function() {
     overlay.style.transition = 'opacity 2.5s ease';
