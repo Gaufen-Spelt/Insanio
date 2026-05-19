@@ -408,13 +408,12 @@ window.startIntro = function() {
     document.addEventListener('keydown', dismiss, { once: true });
     setTimeout(dismiss, 9000);
 
-  // Slow words down and scanlines creep in ~2s before end
 setTimeout(function() {
     if (dismissed) return;
-    overlay.style.transition = 'opacity 1s ease';
-    // Scanlines fade in by adding a class
     overlay.classList.add('intro-ending');
-}, 7000); // 7s into a 9s intro
+    overlay.style.transition = 'opacity 2s ease';  // slow fade over remaining 2s
+    overlay.style.opacity = '0.01';                // near-zero but not gone yet
+}, 7000);
 
 setTimeout(dismiss, 9000);
 
