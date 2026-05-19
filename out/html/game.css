@@ -571,16 +571,15 @@ a.card:hover .card-tooltip {
 /* =============================================
    INTRO OVERLAY
    ============================================= */
-#intro-overlay {
+
+##intro-overlay {
   position: fixed;
   inset: 0;
   z-index: 999;
   background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  transition: opacity 1.8s ease;
+  transition: opacity 1s ease;
+  overflow: hidden;
 }
 
 #intro-overlay.fade-out {
@@ -588,41 +587,20 @@ a.card:hover .card-tooltip {
   pointer-events: none;
 }
 
-#intro-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Grain/noise effect via SVG filter */
-  filter: url(#noise);
-}
-
-#intro-symbol {
-  font-size: 4em;
-  color: rgba(255, 255, 255, 0.07);
-  animation: intro-pulse 6s ease-in-out infinite;
-  user-select: none;
-}
-
-@keyframes intro-pulse {
-  0%   { opacity: 0;    transform: scale(0.92); }
-  40%  { opacity: 1;    transform: scale(1); }
-  70%  { opacity: 0.6;  transform: scale(1.04); }
-  100% { opacity: 0;    transform: scale(0.92); }
-}
-
-/* Vignette on top of everything inside overlay */
-#intro-overlay::after {
-  content: '';
+.intro-word {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center,
-    transparent 30%,
-    rgba(0,0,0,0.85) 100%
-  );
+  color: #fff;
+  font-family: "Courier New", monospace;
   pointer-events: none;
+  opacity: 0;
+  animation: word-flicker linear forwards;
+}
+
+@keyframes word-flicker {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  80%  { opacity: 0.9; }
+  100% { opacity: 0; }
 }
 
 /* =============================================
