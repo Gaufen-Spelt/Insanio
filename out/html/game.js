@@ -327,11 +327,13 @@ window.displayDecks = function(decks) {
   window.hideSidebarAndNotebook = function() {
     document.getElementById('stats_sidebar').style.display = 'none';
     document.getElementById('notebook').style.display = 'none';
+    document.getElementById('page').style.gridTemplateColumns = '0 1fr 0';
 };
 
 window.showSidebarAndNotebook = function() {
     document.getElementById('stats_sidebar').style.display = '';
     document.getElementById('notebook').style.display = '';
+    document.getElementById('page').style.gridTemplateColumns = '';
 };
 
 
