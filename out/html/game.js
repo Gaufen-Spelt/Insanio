@@ -366,27 +366,50 @@ window.showSidebarAndNotebook = function() {
 
 window.startIntro = function() {
     var overlay = document.getElementById('intro-overlay');
-    overlay.style.display = 'flex';
+    overlay.style.display = 'block';
     overlay.style.opacity = '1';
 
+    var words = [
+        'SUBJECT 7', 'DO NOT REMEMBER', 'SPECIMEN', 'EXIT', 'WHO ARE YOU',
+        'CONTAINMENT', 'LEVEL 4', 'DO NOT LOOK', 'RUN', 'PROCEDURE 9',
+        'THEY KNOW', 'FORGET', 'AUTHORIZED', 'CONTAMINATED', 'BREATHE',
+        'SECTOR C', 'ANOMALY', 'ERROR', 'STAY STILL', 'RECORD',
+        'IT WORKED', 'ALMOST', 'OVERRIDE', 'DO NOT OPEN', 'HELP',
+        'CLASSIFIED', '????', 'YES', 'NO', 'AGAIN'
+    ];
+
+    var sizes = ['0.7em', '0.9em', '1.1em', '1.4em', '1.8em', '2.4em', '0.55em'];
     var dismissed = false;
+
     var dismiss = function() {
         if (dismissed) return;
         dismissed = true;
         overlay.classList.add('fade-out');
-        setTimeout(function() {
-            overlay.style.display = 'none';
-        }, 1900);
+        setTimeout(function() { overlay.style.display = 'none'; }, 1050);
     };
 
-    // Dismiss on click or keypress
     overlay.addEventListener('click', dismiss);
     document.addEventListener('keydown', dismiss, { once: true });
+    setTimeout(dismiss, 9000);
 
-    // Auto-dismiss after 12 seconds
-    setTimeout(dismiss, 12000);
+    var spawnWord = function() {
+        if (dismissed) return;
+        var el = document.createElement('span');
+        el.className = 'intro-word';
+        el.textContent = words[Math.floor(Math.random() * words.length)];
+        el.style.left = Math.random() * 90 + '%';
+        el.style.top  = Math.random() * 90 + '%';
+        el.style.fontSize = sizes[Math.floor(Math.random() * sizes.length)];
+        el.style.opacity = String(0.2 + Math.random() * 0.8);
+        var duration = 400 + Math.random() * 1200;
+        el.style.animationDuration = duration + 'ms';
+        overlay.appendChild(el);
+        setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, duration);
+        setTimeout(spawnWord, 80 + Math.random() * 220);
+    };
+
+    spawnWord();
 };
-
 window.enableIntro = function() {
     try { localStorage.removeItem('intro_disabled'); } catch(e) {}
 };
