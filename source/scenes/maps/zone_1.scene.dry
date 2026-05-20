@@ -2,26 +2,19 @@ title: Tunnel
 tags: map
 is-card: true
 choose-if: crowbar = 1
+view-if: zone_1_a_opened = 0
 unavailable-subtitle: Lacking the way to unlock it.
-go-to: zone_1_a if zone_1_a_opened = 1
 
 = Zone A
 
 Zone A has been unlocked
 
 - @zone_1_a_unlock: Go ahead and dive in...
-- @zone_1_a: Go ahead...
 
 @zone_1_a_unlock
 achievement: vent
-view-if: zone_1_a_opened = 0
 on-arrival: zone_1_a_opened = 1
-go-to: zone_1_a
-
-@zone_1_a
-view-if: zone_1_a_opened = 1
-new-page: true
 
 = Zone 1A.
 
-New locations are unlocked.
+New locations are unlocked. Good luck.
