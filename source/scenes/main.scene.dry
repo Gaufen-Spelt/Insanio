@@ -1,4 +1,4 @@
-title: Next month
+title: My PC
 is-hand: true
 on-arrival: {!
 Q.pinnedCardsDescription = '.';
@@ -6,6 +6,7 @@ Q.deckDescription = '.';
 Q.handDescription = '.';
 !}
 
+- @main2: Turn off Personal Computer.
 - @maps
 - @interactions
 - @letter
