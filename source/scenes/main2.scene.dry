@@ -4,6 +4,7 @@ on-arrival: {!
 Q.pinnedCardsDescription = '.';
 Q.deckDescription = '.';
 Q.handDescription = '.';
+window.showSidebarAndNotebook();
 !}
 
 - @main: Turn on PC
