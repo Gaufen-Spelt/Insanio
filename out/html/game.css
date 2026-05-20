@@ -1,25 +1,39 @@
 /* =============================================
    CSS VARIABLES
-   Light mode defaults; dark mode overrides below.
+   Light mode: cold, aged lab documents
+   Dark mode: dead-of-night facility, CRT glow
    ============================================= */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
 body {
-  --bg-color: #f3f3e3;
-  --border-color: #000;
-  --content-bg-color: #f3f3f3;
-  --text-color: #431;
-  --link-color: #900;
-  --link-hover-color: rgba(0, 0, 0, 0.05);
-  --unavailable-bg-color: rgba(0, 0, 0, 0.1);
-  --unavailable-color: #999;
-  --tab-bg-color: #dedede;
-  --tab-color: #ddd;
-  --tab-hover-color: #ececec;
-  --card-border-color: #ccc;
-  --card-bg-color: #ddd;
-  /* Notebook */
-  --notebook-bg: #fefdf5;
-  --notebook-line: #d4cfa8;
-  --notebook-border: #b8ae82;
+  /* Backgrounds */
+  --bg-color: #dfe0d8;
+  --content-bg-color: #ebebdf;
+  /* Borders */
+  --border-color: #3a3e38;
+  /* Text */
+  --text-color: #252a24;
+  /* Links / accent */
+  --link-color: #3d7a68;
+  --link-hover-color: rgba(61, 122, 104, 0.08);
+  /* Unavailable states */
+  --unavailable-bg-color: rgba(0, 0, 0, 0.07);
+  --unavailable-color: #8a8e88;
+  /* Tab strip */
+  --tab-bg-color: #c8c9bc;
+  --tab-color: #bdbeb2;
+  --tab-hover-color: #d5d6c8;
+  /* Cards */
+  --card-border-color: #9a9e98;
+  --card-bg-color: #c8c9bc;
+  /* Choices border — rust/amber */
+  --choices-border-color: #7a5a3a;
+  /* Notebook — aged paper with phosphor echo */
+  --notebook-bg: #f0efe4;
+  --notebook-line: #cccbb8;
+  --notebook-border: #5a7a6a;
+  /* Danger / alert accent */
+  --danger-color: #8a5a3a;
   /* Layout */
   --panel-width: 220px;
   --notebook-tab-width: 28px;
@@ -27,20 +41,24 @@ body {
 }
 
 body.dark-mode {
-  --bg-color: #000;
-  --border-color: #fff;
-  --content-bg-color: #242424;
-  --text-color: #efefef;
-  --link-color: #ff8080;
-  --link-hover-color: rgba(255, 255, 255, 0.06);
-  --tab-bg-color: #555;
-  --tab-color: #505050;
-  --tab-hover-color: #242424;
-  --card-border-color: #4c4c4c;
-  --card-bg-color: #3f3f3f;
-  --notebook-bg: #1a1a12;
-  --notebook-line: #2e2b1a;
-  --notebook-border: #4a4530;
+  --bg-color: #0b0e0c;
+  --content-bg-color: #111410;
+  --border-color: #4a5248;
+  --text-color: #bcc4b4;
+  --link-color: #5aaa8a;
+  --link-hover-color: rgba(90, 170, 138, 0.08);
+  --unavailable-bg-color: rgba(255, 255, 255, 0.04);
+  --unavailable-color: #5a6058;
+  --tab-bg-color: #1e2420;
+  --tab-color: #191f1b;
+  --tab-hover-color: #242e28;
+  --card-border-color: #2e3830;
+  --card-bg-color: #1e2420;
+  --choices-border-color: #cc6633;
+  --notebook-bg: #0e110d;
+  --notebook-line: #1e2820;
+  --notebook-border: #3a6050;
+  --danger-color: #cc6633;
 }
 
 
@@ -52,6 +70,7 @@ body.dark-mode {
 }
 
 body {
+  /* Serif for body narrative; monospace injected at UI points */
   font-family: "Minion Pro", Georgia, serif;
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -154,7 +173,7 @@ header {
   align-items: center;
   padding: 0.5em 1em;
   color: var(--text-color);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 header h1, header h2 {
@@ -162,11 +181,15 @@ header h1, header h2 {
   font-weight: normal;
   font-size: 1em;
   margin: 0;
+  /* Monospace for header identity — feels like a terminal label */
+  font-family: "Space Mono", "Courier New", monospace;
+  letter-spacing: 0.04em;
 }
-header h1 { font-weight: bold; }
+header h1 { font-weight: 700; }
 header h2::before {
   content: "by ";
   font-style: italic;
+  font-family: "Minion Pro", Georgia, serif;
 }
 
 #header-links {
@@ -175,6 +198,8 @@ header h2::before {
   background-color: var(--bg-color);
   padding: 0.4em 1em;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.85em;
 }
 
 
@@ -184,7 +209,7 @@ header h2::before {
 #stats_sidebar {
   grid-area: sidebar;
   background-color: var(--content-bg-color);
-  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.18);
   position: sticky;
   top: 0;
   align-self: start;
@@ -193,7 +218,8 @@ header h2::before {
 }
 
 body.dark-mode #stats_sidebar {
-  border: double 4px #888;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 18px rgba(90, 170, 138, 0.06);
 }
 
 .tab_container {
@@ -203,14 +229,16 @@ body.dark-mode #stats_sidebar {
 
 .tab_button {
   flex: 1;
-  font-family: "Minion Pro", Georgia, serif;
+  font-family: "Space Mono", "Courier New", monospace;
   background-color: var(--tab-color);
   color: var(--text-color);
   border: none;
   outline: none;
   padding: 8px 4px;
   cursor: pointer;
-  font-size: 0.82em;
+  font-size: 0.75em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 .tab_button.active { background-color: var(--content-bg-color); }
 .tab_button:hover  { background-color: var(--tab-hover-color); }
@@ -221,15 +249,20 @@ body.dark-mode #stats_sidebar {
 }
 #qualities p   { text-indent: 0; }
 #qualities h1  {
-  font-size: 1.05em;
-  font-weight: normal;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.85em;
+  font-weight: 700;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-shadow:
-    rgba(255, 255, 255, 0.75) 2px 2px 2px,
-    rgba(0, 0, 0, 0.1) -1px -1px 2px;
+  letter-spacing: 0.14em;
+  /* Subtle teal glow in dark, flat in light */
+  text-shadow: none;
   margin: 0.4em 0;
+  color: var(--link-color);
+}
+
+body.dark-mode #qualities h1 {
+  text-shadow: 0 0 8px rgba(90, 170, 138, 0.4);
 }
 
 
@@ -242,25 +275,31 @@ body.dark-mode #stats_sidebar {
   background-color: var(--content-bg-color);
   font-size: 1.1em;
   padding: 1em 1.5em 1.5em;
-  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.18);
   margin: 0.8em;
   align-self: start;
 }
 
 body.dark-mode #content {
-  border: double 4px #888;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 24px rgba(90, 170, 138, 0.05);
 }
 
 #content h1 {
   margin: 0.5em 0 1em;
-  font-size: 1.35em;
-  font-weight: normal;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 1.1em;
+  font-weight: 700;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-shadow:
-    rgba(255, 255, 255, 0.75) 2px 2px 2px,
-    rgba(0, 0, 0, 0.1) -1px -1px 2px;
+  letter-spacing: 0.18em;
+  color: var(--link-color);
+  /* Understated — no heavy text-shadow */
+  text-shadow: none;
+}
+
+body.dark-mode #content h1 {
+  text-shadow: 0 0 12px rgba(90, 170, 138, 0.35);
 }
 
 #content #read-marker {
@@ -269,31 +308,38 @@ body.dark-mode #content {
   height: 1px;
   width: 20%;
   clear: left;
+  opacity: 0.4;
 }
 
 p.game-over {
-  border: 2px solid #bbb;
+  border: 1px solid var(--danger-color);
   padding: 0.5em;
   margin: 0.5em 0 0;
-  border-radius: 4px;
-  color: #999;
+  border-radius: 2px;
+  color: var(--danger-color);
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  letter-spacing: 0.06em;
 }
 
 ul.choices {
-  border: 2px solid #876;
+  border: 1px solid var(--choices-border-color);
   padding: 0;
   margin: 0.25em 0 0;
   list-style-type: none;
-  border-radius: 4px;
+  border-radius: 2px;
   clear: left;
 }
 ul.choices li {
-  border-bottom: 1px solid #876;
+  border-bottom: 1px solid var(--choices-border-color);
   padding: 0.5em;
+  opacity: 0.9;
 }
 ul.choices li div.subtitle {
   margin-left: 2em;
   font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.75;
 }
 ul.choices li.unavailable {
   color: var(--unavailable-color);
@@ -319,7 +365,7 @@ ul.choices a { text-decoration: none; }
   top: 0;
   align-self: start;
   height: calc(100vh - 1.6em);
-  margin: 0.8em 0 0.8em 0; 
+  margin: 0.8em 0 0.8em 0;
   overflow: hidden;
 }
 
@@ -327,7 +373,7 @@ ul.choices a { text-decoration: none; }
 #notebook-tab {
   width: var(--notebook-tab-width);
   background-color: var(--notebook-border);
-  color: #fff;
+  color: #e8efe8;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -335,8 +381,9 @@ ul.choices a { text-decoration: none; }
   cursor: pointer;
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-size: 0.75em;
-  letter-spacing: 0.15em;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.65em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   user-select: none;
   flex-shrink: 0;
@@ -345,7 +392,9 @@ ul.choices a { text-decoration: none; }
   transition: background 0.2s;
   border-radius: 3px 0 0 3px;
 }
-#notebook-tab:hover { background-color: #a09860; }
+#notebook-tab:hover { background-color: #4a8a78; }
+
+body.dark-mode #notebook-tab:hover { background-color: #2e6050; }
 
 #notebook-tab .tab-icon {
   writing-mode: horizontal-tb;
@@ -374,44 +423,47 @@ ul.choices a { text-decoration: none; }
   justify-content: space-between;
   padding: 0.5em 0.8em;
   background-color: var(--notebook-border);
-  color: #fff;
-  font-size: 0.8em;
-  letter-spacing: 0.05em;
+  color: #e8efe8;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
   flex-shrink: 0;
 }
 #notebook-header span {
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
 }
 
 #notebook-clear {
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #fff;
+  border: 1px solid rgba(232, 239, 232, 0.4);
+  color: #e8efe8;
   font-size: 0.75em;
   padding: 2px 6px;
   cursor: pointer;
   border-radius: 2px;
-  font-family: inherit;
+  font-family: "Space Mono", "Courier New", monospace;
+  letter-spacing: 0.04em;
+  transition: background 0.15s;
 }
-#notebook-clear:hover { background-color: rgba(255, 255, 255, 0.15); }
+#notebook-clear:hover { background-color: rgba(232, 239, 232, 0.15); }
 
 /* Lined paper textarea */
 #notebook-textarea {
   flex: 1;
   width: 100%;
   padding: 0.6em 1em 0.6em 2.5em;
-  font-family: "Minion Pro", Georgia, serif;
-  font-size: 0.9em;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.82em;
   color: var(--text-color);
   background-color: var(--notebook-bg);
   background-image:
     linear-gradient(
       to right,
       transparent 2em,
-      rgba(200, 80, 80, 0.25) 2em,
-      rgba(200, 80, 80, 0.25) calc(2em + 1px),
+      rgba(90, 170, 138, 0.2) 2em,
+      rgba(90, 170, 138, 0.2) calc(2em + 1px),
       transparent calc(2em + 1px)
     ),
     repeating-linear-gradient(
@@ -430,11 +482,13 @@ ul.choices a { text-decoration: none; }
 
 #notebook-footer {
   padding: 0.3em 0.8em;
-  font-size: 0.72em;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.68em;
   color: var(--unavailable-color);
   background-color: var(--notebook-bg);
   border-top: 1px solid var(--notebook-line);
   flex-shrink: 0;
+  letter-spacing: 0.04em;
 }
 
 
@@ -443,18 +497,23 @@ ul.choices a { text-decoration: none; }
    ============================================= */
 footer {
   grid-area: footer;
-  font-size: 0.8em;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.72em;
   padding: 0.5em 1em 1em;
-  color: var(--text-color);
+  color: var(--unavailable-color);
+  letter-spacing: 0.04em;
 }
-footer a { padding-right: 1em; }
+footer a {
+  padding-right: 1em;
+  color: var(--link-color);
+}
 
 
 /* =============================================
    OVERLAYS (options, save/load)
    ============================================= */
 .overlay {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   display: none;
   position: fixed;
   inset: 0;
@@ -466,10 +525,12 @@ footer a { padding-right: 1em; }
   position: relative;
   max-width: 540px;
   margin: 100px auto;
-  background: rgba(50, 50, 50, 0.85);
-  border: 2px solid #fff;
-  color: #fff;
+  background: rgba(18, 22, 18, 0.92);
+  border: 1px solid var(--notebook-border);
+  color: #c8d4c0;
   padding: 1em;
+  font-family: "Space Mono", "Courier New", monospace;
+  font-size: 0.9em;
 }
 
 .save_info { min-width: 10em; }
@@ -487,15 +548,15 @@ a.card {
   display: inline-block;
   width: 120px;
   height: 150px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-  border: 10px solid var(--card-border-color);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+  border: 8px solid var(--card-border-color);
   margin-bottom: 0.5em;
   position: relative;
+  transition: box-shadow 0.15s, transform 0.15s;
 }
 a.card:hover {
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
-  left: -5px;
-  top: -5px;
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3);
+  transform: translate(-4px, -4px);
 }
 
 div.blank-card {
@@ -503,7 +564,7 @@ div.blank-card {
   width: 120px;
   height: 150px;
   background-color: var(--card-bg-color);
-  border: 10px solid var(--card-border-color);
+  border: 8px solid var(--card-border-color);
   margin-bottom: 0.5em;
 }
 
@@ -524,7 +585,10 @@ div.blank-card {
 .card-caption {
   text-align: center;
   display: block;
-  font-size: 1em;
+  font-size: 0.85em;
+  font-family: "Space Mono", "Courier New", monospace;
+  letter-spacing: 0.04em;
+  margin-top: 0.3em;
 }
 
 .card-tooltip {
@@ -532,12 +596,13 @@ div.blank-card {
   visibility: hidden;
   width: 150px;
   max-width: 200px;
-  font-size: 0.9em;
+  font-size: 0.85em;
   z-index: 2;
-  padding: 0.2em;
-  border: 1px solid var(--border-color);
+  padding: 0.4em 0.5em;
+  border: 1px solid var(--notebook-border);
   background-color: var(--content-bg-color);
   left: 105%;
+  line-height: 1.4;
 }
 .card-img {
   height: 150px;
@@ -552,7 +617,7 @@ a.card:hover .card-tooltip {
 
 .face-figure {
   display: inline-block;
-  border: 5px solid var(--card-border-color);
+  border: 4px solid var(--card-border-color);
   float: left;
   max-width: 35%;
   margin-right: 1em;
@@ -564,14 +629,10 @@ a.card:hover .card-tooltip {
   object-fit: cover;
 }
 
-/* 
-=============================================
-*/
 
 /* =============================================
    INTRO OVERLAY
    ============================================= */
-
 #intro-overlay {
   position: fixed;
   inset: 0;
@@ -589,8 +650,8 @@ a.card:hover .card-tooltip {
 
 .intro-word {
   position: absolute;
-  color: #fff;
-  font-family: "Courier New", monospace;
+  color: #5aaa8a;
+  font-family: "Space Mono", "Courier New", monospace;
   pointer-events: none;
   opacity: 0;
   animation: word-flicker linear forwards;
@@ -599,22 +660,19 @@ a.card:hover .card-tooltip {
 @keyframes word-flicker {
   0%   { opacity: 0; }
   10%  { opacity: 1; }
-  80%  { opacity: 0.9; }
+  80%  { opacity: 0.85; }
   100% { opacity: 0; }
-}
-
-#intro-overlay.intro-ending::after {
-  opacity: 1;
 }
 
 #intro-overlay::after {
   content: '';
   position: absolute;
   inset: 0;
+  /* CRT scanline effect on fade */
   background: repeating-linear-gradient(
     0deg,
-    rgba(0,0,0,0.15) 0px,
-    rgba(0,0,0,0.15) 1px,
+    rgba(0,0,0,0.18) 0px,
+    rgba(0,0,0,0.18) 1px,
     transparent 1px,
     transparent 2px
   );
@@ -628,25 +686,15 @@ a.card:hover .card-tooltip {
 }
 
 /* =============================================
-   PARTY SEAT COLORS
+   MISC UTILITIES
    ============================================= */
-.seat.kpd  { fill: #8B0000; }
-.seat.spd  { fill: #E3000F; stroke: var(--border-color); stroke-width: 1.5px; }
-.seat.ddp  { fill: #DCCA4A; }
-.seat.z    { fill: #000; }
-.seat.bvp  { fill: #69A2BE; }
-.seat.dvp  { fill: #D5AC27; }
-.seat.other{ fill: #909090; }
-.seat.dnvp { fill: #3F7BC1; }
-.seat.nsdap{ fill: #954B00; }
-.seat.sapd { fill: #C40000; }
-
 .tooltip-text {
   text-decoration: underline;
   text-decoration-style: dotted;
+  text-underline-offset: 2px;
 }
 
-/* Colored box indicator (party legend etc.) */
+/* Colored box indicator */
 .box {
   display: inline-block;
   height: 1em;
@@ -696,12 +744,12 @@ a.card:hover .card-tooltip {
   }
   .tab_button {
     padding: 8px 2px;
-    font-size: 0.76em;
+    font-size: 0.7em;
   }
 
   /* Smaller cards on mobile */
   .card-img      { height: 125px; width: 100px; }
-  a.card         { width: 100px; height: 125px; border-width: 8px; }
-  div.blank-card { width: 100px; height: 125px; border-width: 8px; }
+  a.card         { width: 100px; height: 125px; border-width: 6px; }
+  div.blank-card { width: 100px; height: 125px; border-width: 6px; }
   .card-in-hand, .pinned-card, .deck { max-width: 120px; }
 }
