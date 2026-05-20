@@ -7,7 +7,7 @@ Q.handDescription = '.';
 window.showSidebarAndNotebook();
 !}
 
-- @main2: Turn off Personal Computer.
+- @main_2_proxy: Turn off Personal Computer.
 - @maps
 - @interactions
 - @letter
@@ -22,4 +22,14 @@ Q.handDescription = '.';
 window.showSidebarAndNotebook();
 !}
 
-- @main: Turn on PC
+- @main_1_proxy: Turn on PC
+
+@main_2_proxy
+go-to: main2
+title: Turn off Personal Computer
+new-page: true
+
+@main_1_proxy
+go-to: main
+title: Turn on Personal Computer
+new-page: true
