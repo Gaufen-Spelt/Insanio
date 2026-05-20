@@ -1,7 +1,9 @@
-title: Zone A
+title: Office A2
 tags: map
 is-card: true
 view-if: 1 = 1
+choose-if: keycard_level >= 1
+unavailable-subtitle: Requires level 1 or higher keycard to open this place.
 
 = Example of room.
 
