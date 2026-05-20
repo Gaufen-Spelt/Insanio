@@ -11,3 +11,15 @@ window.showSidebarAndNotebook();
 - @maps
 - @interactions
 - @letter
+
+@main2
+title: Your hand.
+is-hand: true
+on-arrival: {!
+Q.pinnedCardsDescription = '.';
+Q.deckDescription = '.';
+Q.handDescription = '.';
+window.showSidebarAndNotebook();
+!}
+
+- @main: Turn on PC
