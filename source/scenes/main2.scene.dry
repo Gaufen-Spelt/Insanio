@@ -1,0 +1,9 @@
+title: Your hand.
+is-hand: true
+on-arrival: {!
+Q.pinnedCardsDescription = '.';
+Q.deckDescription = '.';
+Q.handDescription = '.';
+!}
+
+- @main: Turn on PC
