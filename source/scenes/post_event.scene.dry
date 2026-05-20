@@ -1,6 +1,7 @@
 title: Post Event
 new-page: true
 on-arrival: {!
+window.hideSidebarAndNotebook();
 
 
 // 1. update dates
