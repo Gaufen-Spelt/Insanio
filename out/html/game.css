@@ -630,6 +630,360 @@ a.card:hover .card-tooltip {
 }
 
 
+
+
+
+
+
+/* =============================================
+   RETRO PC MODE — Win95/98 aesthetic
+   Activated via window.bootPC() / window.revertPC()
+   ============================================= */
+
+/* Boot/POST overlay */
+#pc-boot-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  font-family: "Courier New", monospace;
+  color: #aaa;
+  font-size: 13px;
+  overflow: hidden;
+  cursor: default;
+}
+
+#pc-boot-screen {
+  padding: 2em;
+  white-space: pre;
+  line-height: 1.6;
+}
+
+#pc-boot-overlay .bios-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #aaa;
+  color: #000;
+  padding: 2px 6px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#pc-boot-overlay .scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.25) 0px, rgba(0,0,0,0.25) 1px,
+    transparent 1px, transparent 3px
+  );
+  pointer-events: none;
+}
+
+#pc-boot-overlay .crt-flicker {
+  position: absolute;
+  inset: 0;
+  animation: crt-flicker 0.08s infinite;
+  background: rgba(255,255,255,0.015);
+  pointer-events: none;
+}
+
+@keyframes crt-flicker {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.93; }
+}
+
+/* Win98 system chrome injected on body */
+body.retro-pc-mode {
+  font-family: "Tahoma", "MS Sans Serif", sans-serif !important;
+  font-size: 11px !important;
+  background: #008080 !important; /* Classic teal desktop */
+  color: #000 !important;
+  image-rendering: pixelated;
+}
+
+/* The "window" that wraps the game */
+body.retro-pc-mode #page {
+  background: #c0c0c0;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  box-shadow: 4px 4px 0 #000;
+  max-width: 900px;
+  min-height: unset;
+}
+
+/* Title bar */
+body.retro-pc-mode header {
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: #fff !important;
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: bold;
+  padding: 3px 4px;
+  border-bottom: 1px solid #000;
+  letter-spacing: 0;
+  display: flex;
+  align-items: center;
+}
+
+body.retro-pc-mode header h1,
+body.retro-pc-mode header h2 {
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 11px !important;
+  color: #fff !important;
+  font-weight: bold;
+  letter-spacing: 0;
+}
+
+body.retro-pc-mode header h2::before { content: "- "; font-style: normal; }
+
+/* Fake window control buttons in title bar */
+body.retro-pc-mode #retro-window-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+}
+body.retro-pc-mode .retro-wc-btn {
+  width: 16px; height: 14px;
+  background: #c0c0c0;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  font-size: 9px;
+  line-height: 10px;
+  text-align: center;
+  color: #000;
+  cursor: default;
+  font-family: "Marlett", "Tahoma", sans-serif;
+  user-select: none;
+}
+body.retro-pc-mode .retro-wc-btn:active {
+  border-top: 2px solid #404040;
+  border-left: 2px solid #404040;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}
+
+/* Sidebar — Win98 panel */
+body.retro-pc-mode #stats_sidebar {
+  background: #c0c0c0 !important;
+  border: 2px inset #808080;
+  box-shadow: none !important;
+  margin: 4px 0 4px 4px;
+  border-radius: 0;
+}
+
+body.retro-pc-mode .tab_button {
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 10px !important;
+  background: #c0c0c0;
+  color: #000;
+  border: 1px solid #808080;
+  border-radius: 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+body.retro-pc-mode .tab_button.active {
+  background: #fff;
+  border-bottom: 1px solid #fff;
+}
+
+body.retro-pc-mode #qualities h1 {
+  font-family: "Tahoma", sans-serif !important;
+  color: #000080 !important;
+  text-shadow: none !important;
+  font-size: 10px !important;
+  letter-spacing: 0;
+}
+
+/* Content — white document panel */
+body.retro-pc-mode #content {
+  background: #fff !important;
+  border: 2px inset #808080;
+  box-shadow: none !important;
+  font-family: "Times New Roman", serif !important;
+  font-size: 12px !important;
+  border-radius: 0;
+  margin: 4px;
+}
+
+body.retro-pc-mode #content h1 {
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 13px !important;
+  color: #000080 !important;
+  text-shadow: none !important;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+}
+
+/* Choices — classic Win98 listbox */
+body.retro-pc-mode ul.choices {
+  border: 2px inset #808080;
+  border-radius: 0;
+}
+body.retro-pc-mode ul.choices li {
+  border-bottom: 1px solid #c0c0c0;
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 11px !important;
+}
+body.retro-pc-mode ul.choices li:hover {
+  background: #000080 !important;
+  color: #fff !important;
+}
+body.retro-pc-mode ul.choices a { color: inherit !important; }
+
+/* Header links become a Win98 menu bar */
+body.retro-pc-mode #header-links {
+  background: #c0c0c0 !important;
+  box-shadow: none;
+  padding: 2px 4px;
+  gap: 0;
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 11px !important;
+}
+body.retro-pc-mode #header-links a {
+  color: #000 !important;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+}
+body.retro-pc-mode #header-links a:hover {
+  border: 1px solid;
+  border-top-color: #fff;
+  border-left-color: #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+}
+
+/* Notebook tab */
+body.retro-pc-mode #notebook-tab {
+  background: #c0c0c0 !important;
+  color: #000 !important;
+  border-left: 2px solid #fff;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  font-family: "Tahoma", sans-serif !important;
+  font-size: 9px !important;
+  border-radius: 0;
+}
+body.retro-pc-mode #notebook-body {
+  background: #fff !important;
+  border: 2px inset #808080;
+}
+body.retro-pc-mode #notebook-textarea {
+  font-family: "Courier New", monospace !important;
+  font-size: 11px !important;
+  background: #fff !important;
+  background-image: none !important;
+}
+body.retro-pc-mode #notebook-header {
+  background: linear-gradient(to right, #000080, #1084d0) !important;
+  font-family: "Tahoma", sans-serif !important;
+}
+
+/* Win98 taskbar along the bottom */
+#retro-taskbar {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 28px;
+  background: #c0c0c0;
+  border-top: 2px solid #fff;
+  z-index: 8888;
+  font-family: "Tahoma", sans-serif;
+  font-size: 11px;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+body.retro-pc-mode #retro-taskbar { display: flex; }
+body.retro-pc-mode footer { padding-bottom: 36px; }
+
+#retro-start-btn {
+  background: #c0c0c0;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  font-family: "Tahoma", sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 8px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#retro-start-btn:active {
+  border-top-color: #404040; border-left-color: #404040;
+  border-right-color: #fff; border-bottom-color: #fff;
+}
+
+#retro-clock {
+  margin-left: auto;
+  border: 1px inset #808080;
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+#retro-active-window {
+  background: #000080;
+  color: #fff;
+  padding: 2px 10px;
+  border-top: 2px solid #4040c0;
+  border-left: 2px solid #4040c0;
+  border-right: 2px solid #000040;
+  border-bottom: 2px solid #000040;
+  font-weight: bold;
+  min-width: 120px;
+}
+
+/* Shutdown overlay */
+#retro-shutdown {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #000;
+  color: #fff;
+  font-family: "Tahoma", sans-serif;
+  font-size: 14px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1em;
+  text-align: center;
+}
+#retro-shutdown.active { display: flex; }
+#retro-shutdown .shutdown-msg {
+  border: 1px solid #fff;
+  padding: 2em 3em;
+  max-width: 400px;
+}
+
+/* Pixel cursor in retro mode */
+body.retro-pc-mode { cursor: default !important; }
+body.retro-pc-mode a, body.retro-pc-mode button { cursor: default !important; }
+body.retro-pc-mode ul.choices li:hover { cursor: default !important; }
+
+
+
+
+
+
+
+
+
+
+
 /* =============================================
    INTRO OVERLAY
    ============================================= */
