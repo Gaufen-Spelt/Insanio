@@ -5,7 +5,6 @@ Q.pinnedCardsDescription = '.';
 Q.deckDescription = '.';
 Q.handDescription = '.';
 window.showSidebarAndNotebook();
-window.bootPC();
 !}
 
 - @main_2_proxy: Turn off Personal Computer.
@@ -22,21 +21,26 @@ Q.deckDescription = '.';
 Q.handDescription = '.';
 window.showSidebarAndNotebook();
 
-window.revertPC();  
 !}
 
 - @main_1_proxy: Turn on PC
 
 @main_2_proxy
-go-to: main
+go-to: main2
 title: Turn off Personal Computer
 new-page: true
 is-card: true
 is-pinned-card: true
+on-departure: {!
+window.revertPC();
+!}
 
 @main_1_proxy
-go-to: main2
+go-to: main
 title: Turn on Personal Computer
 new-page: true
 is-card: true
 is-pinned-card: true
+on-departure: {!
+window.bootPC();
+!}
