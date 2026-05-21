@@ -454,4 +454,199 @@ window.populateIntroOption = function() {
     }
 };
 
+
+
+
+
+
+
+
+
+
+
+// =============================================
+// RETRO PC MODE
+// window.bootPC()   — triggers CRT boot → Win98
+// window.revertPC() — triggers shutdown → restore
+// =============================================
+
+  // ---------- taskbar clock ----------
+  var _clockInterval = null;
+  function _startClock() {
+    var el = document.getElementById('retro-clock');
+    if (!el) return;
+    function tick() {
+      var now = new Date();
+      var h = now.getHours(), m = now.getMinutes();
+      var ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      el.textContent = h + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+    }
+    tick();
+    _clockInterval = setInterval(tick, 10000);
+  }
+  function _stopClock() {
+    clearInterval(_clockInterval);
+    _clockInterval = null;
+  }
+
+  // ---------- inject persistent DOM elements once ----------
+  function _ensureRetroDOM() {
+    if (document.getElementById('pc-boot-overlay')) return;
+
+    // Boot/POST overlay
+    var boot = document.createElement('div');
+    boot.id = 'pc-boot-overlay';
+    boot.innerHTML =
+      '<div class="scanlines"></div>' +
+      '<div class="crt-flicker"></div>' +
+      '<div id="pc-boot-screen"></div>' +
+      '<div class="bios-bar">' +
+        '<span>Award Modular BIOS v4.51PG</span>' +
+        '<span>Press DEL to enter SETUP</span>' +
+      '</div>';
+    document.body.appendChild(boot);
+
+    // Taskbar
+    var tb = document.createElement('div');
+    tb.id = 'retro-taskbar';
+    tb.innerHTML =
+      '<button id="retro-start-btn" onclick="window.revertPC()">⊞ Start</button>' +
+      '<div id="retro-active-window">Insanio: The Beginnings</div>' +
+      '<div id="retro-clock">12:00 PM</div>';
+    document.body.appendChild(tb);
+
+    // Window controls injected into header title bar
+    var hdr = document.querySelector('header');
+    if (hdr && !document.getElementById('retro-window-controls')) {
+      var wc = document.createElement('div');
+      wc.id = 'retro-window-controls';
+      wc.innerHTML =
+        '<div class="retro-wc-btn" title="Minimize">_</div>' +
+        '<div class="retro-wc-btn" title="Maximize">□</div>' +
+        '<div class="retro-wc-btn" title="Close" onclick="window.revertPC()">✕</div>';
+      hdr.appendChild(wc);
+    }
+
+    // Shutdown overlay
+    var sd = document.createElement('div');
+    sd.id = 'retro-shutdown';
+    sd.innerHTML =
+      '<div class="shutdown-msg">' +
+        '<p><strong>Windows is shutting down.</strong></p>' +
+        '<p>Please wait while your computer shuts down...</p>' +
+      '</div>';
+    document.body.appendChild(sd);
+  }
+
+  // ---------- BOOT sequence ----------
+  var POST_LINES = [
+    'Award Modular BIOS v4.51PG, An Energy Star Ally',
+    'Copyright (C) 1984-1999, Award Software, Inc.',
+    '',
+    'ASUS P2B-LS ACPI BIOS Revision 1011',
+    '',
+    'CPU : Intel Pentium II 350MHz',
+    'Memory Test : ######## K OK',
+    '',
+    'Detecting Primary Master ... ST38421A',
+    'Detecting Primary Slave  ... ATAPI CD-ROM',
+    '',
+    'Press DEL to enter SETUP, ESC to skip memory test',
+    '',
+    'Starting Windows 98...',
+    '',
+    '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░',
+  ];
+
+  window.bootPC = function() {
+    _ensureRetroDOM();
+
+    var overlay = document.getElementById('pc-boot-overlay');
+    var screen  = document.getElementById('pc-boot-screen');
+    overlay.style.display = 'block';
+    overlay.style.opacity = '1';
+    screen.textContent = '';
+
+    var lineIdx = 0;
+    function printNextLine() {
+      if (lineIdx >= POST_LINES.length) {
+        // Flash to white then reveal Win98 mode
+        setTimeout(function() {
+          overlay.style.transition = 'opacity 0.15s';
+          overlay.style.opacity = '0';
+          setTimeout(function() {
+            overlay.style.display = 'none';
+            overlay.style.transition = '';
+            document.body.classList.add('retro-pc-mode');
+            _startClock();
+            // Brief "screen on" flash
+            document.body.style.transition = 'filter 0.3s';
+            document.body.style.filter = 'brightness(2)';
+            setTimeout(function() { document.body.style.filter = ''; }, 300);
+          }, 200);
+        }, 900);
+        return;
+      }
+
+      // Typing effect for last line (progress bar), instant for others
+      var line = POST_LINES[lineIdx];
+      lineIdx++;
+
+      if (lineIdx === POST_LINES.length) {
+        // Animate the progress bar
+        var bar = '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░';
+        var filled = '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓';
+        screen.textContent += '\n';
+        var barEl = document.createElement('span');
+        barEl.textContent = bar;
+        barEl.style.color = '#0f0';
+        screen.appendChild(barEl);
+        var steps = 0;
+        var barInt = setInterval(function() {
+          steps++;
+          var prog = Math.min(steps * 3, 30);
+          barEl.textContent = filled.slice(0, prog) + '░'.repeat(30 - prog);
+          if (steps >= 10) {
+            clearInterval(barInt);
+            printNextLine();
+          }
+        }, 120);
+      } else {
+        screen.textContent += line + '\n';
+        setTimeout(printNextLine, 60 + Math.random() * 80);
+      }
+    }
+
+    printNextLine();
+  };
+
+  // ---------- REVERT / shutdown ----------
+  window.revertPC = function() {
+    if (!document.body.classList.contains('retro-pc-mode')) return;
+
+    var sd = document.getElementById('retro-shutdown');
+    sd.classList.add('active');
+
+    setTimeout(function() {
+      // Flicker off
+      sd.style.transition = 'opacity 0.5s';
+      sd.style.opacity = '0';
+      setTimeout(function() {
+        sd.classList.remove('active');
+        sd.style.opacity = '';
+        sd.style.transition = '';
+        document.body.classList.remove('retro-pc-mode');
+        _stopClock();
+        // Subtle fade-back
+        document.body.style.transition = 'filter 0.4s';
+        document.body.style.filter = 'brightness(0)';
+        setTimeout(function() {
+          document.body.style.filter = '';
+          setTimeout(function() { document.body.style.transition = ''; }, 400);
+        }, 80);
+      }, 600);
+    }, 1800);
+  };
+
 }());
