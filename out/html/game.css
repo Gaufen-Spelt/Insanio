@@ -542,6 +542,10 @@ footer a {
 ul.decks, ul.hand, ul.pinned-cards {
   list-style: none;
   padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  align-items: flex-start;
 }
 
 a.card {
@@ -569,11 +573,12 @@ div.blank-card {
 }
 
 .card-in-hand, .pinned-card, .deck {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+  flex-shrink: 0;
   position: relative;
-  max-width: 150px;
-  margin-right: 1em;
-  vertical-align: top;
 }
 
 .unavailable-card {
@@ -906,6 +911,14 @@ body.retro-pc-mode #notebook-header {
 }
 body.retro-pc-mode #retro-taskbar { display: flex; }
 body.retro-pc-mode footer { padding-bottom: 36px; }
+
+
+
+body.retro-pc-mode ul.decks,
+body.retro-pc-mode ul.hand,
+body.retro-pc-mode ul.pinned-cards {
+  gap: 6px;
+}
 
 #retro-start-btn {
   background: #c0c0c0;
