@@ -30,6 +30,9 @@ title: Turn off Personal Computer
 new-page: true
 is-card: true
 is-pinned-card: true
+on-arrival: {!
+window.revertPC();  
+!}
 
 @main_1_proxy
 go-to: main
@@ -37,3 +40,6 @@ title: Turn on Personal Computer
 new-page: true
 is-card: true
 is-pinned-card: true
+on-arrival: {!
+window.bootPC();  
+!}
