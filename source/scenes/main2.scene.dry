@@ -12,7 +12,7 @@ window.showSidebarAndNotebook();
 - @interactions
 - @letter
 
-@main2
+@main
 title: Your hand.
 is-hand: true
 on-arrival: {!
@@ -25,7 +25,7 @@ window.showSidebarAndNotebook();
 - @main_1_proxy: Turn on PC
 
 @main_2_proxy
-go-to: main2
+go-to: main
 title: Turn off Personal Computer
 new-page: true
 is-card: true
@@ -35,7 +35,7 @@ window.revertPC();
 !}
 
 @main_1_proxy
-go-to: main
+go-to: main2
 title: Turn on Personal Computer
 new-page: true
 is-card: true
