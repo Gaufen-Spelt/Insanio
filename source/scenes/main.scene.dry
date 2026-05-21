@@ -5,6 +5,7 @@ Q.pinnedCardsDescription = '.';
 Q.deckDescription = '.';
 Q.handDescription = '.';
 window.showSidebarAndNotebook();
+window.bootPC();
 !}
 
 - @main_2_proxy: Turn off Personal Computer.
@@ -12,7 +13,7 @@ window.showSidebarAndNotebook();
 - @interactions
 - @letter
 
-@main
+@main2
 title: Your hand.
 is-hand: true
 on-arrival: {!
@@ -20,6 +21,8 @@ Q.pinnedCardsDescription = '.';
 Q.deckDescription = '.';
 Q.handDescription = '.';
 window.showSidebarAndNotebook();
+
+window.revertPC();  
 !}
 
 - @main_1_proxy: Turn on PC
@@ -30,9 +33,6 @@ title: Turn off Personal Computer
 new-page: true
 is-card: true
 is-pinned-card: true
-on-arrival: {!
-window.revertPC();  
-!}
 
 @main_1_proxy
 go-to: main2
@@ -40,6 +40,3 @@ title: Turn on Personal Computer
 new-page: true
 is-card: true
 is-pinned-card: true
-on-arrival: {!
-window.bootPC();  
-!}
