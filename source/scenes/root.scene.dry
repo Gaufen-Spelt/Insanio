@@ -122,7 +122,7 @@ new-page: true
 on-arrival: {!
 window.showSidebarAndNotebook();
 !}
-go-to: main
+go-to: main.main2
 
 = ...
 
