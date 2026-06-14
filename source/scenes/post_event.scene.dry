@@ -45,8 +45,6 @@ if (typeof window !== "undefined" && window.generateBar) {
 !}
 go-to: events_choice if has_event = 1; main if has_event = 0
 
-= Turn [+ tick +]
-
 @events_choice
 
 - #event
