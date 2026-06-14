@@ -7,6 +7,8 @@ Q.handDescription = '.';
 window.showSidebarAndNotebook();
 !}
 
+= Turn <span id="tick-display">{tick}</span>
+
 - @main_2_proxy: Turn off Personal Computer.
 - @maps
 - @interactions
