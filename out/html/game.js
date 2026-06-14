@@ -655,9 +655,8 @@ window.populateIntroOption = function() {
   var q = game && game.qualities;
   if (q) {
     q['tick'] = (q['tick'] || 0) + 1;
-    if (q['tick'] % 60 === 0) {
-      ui.dendryEngine.goToScene('post_event');
-    }
+    var el = document.querySelector('#tick-display');
+    if (el) el.textContent = q['tick'];
   }
 }, 1000);
 
